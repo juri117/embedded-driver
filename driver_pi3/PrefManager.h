@@ -1,10 +1,3 @@
-/*
- * PrefManager.h
- *
- *  Created on: Feb 16, 2018
- *      Author: juri
- */
-
 /**
  * @file TcpConnection.h
  * @author Juri

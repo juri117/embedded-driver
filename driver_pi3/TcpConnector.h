@@ -1,6 +1,6 @@
 /**
  * @file TcpConnection.h
- * @author Juri Bieler (juribieler@gmail.com)
+ * @author Juri
  * @brief
  * @version 0.1
  * @date 2020-08-06

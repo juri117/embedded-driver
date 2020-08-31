@@ -24,31 +24,16 @@ error_t register_gpio_interrupt(int gpio_num, void (*function)(), void *args) {
 void init_nvs() {}
 
 void init_onboard_led() {
-  // gpio_pad_select_gpio(LED_GPIO);                  // Set pin as GPIO
-  // gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);  // Set as Output
   pinMode(LED_GPIO, OUTPUT);
 }
 
 void init_interrupt_out(int pin_num) {
-  // gpio_pad_select_gpio(pin_num);  // Set pin as GPIO
-  // gpio_set_direction(pin_num,
-  //                    GPIO_MODE_OUTPUT);  // Set as Output with open drain
-  // // gpio_pullup_en(pin_num);
-  // gpio_pulldown_en(pin_num);
   pinMode(pin_num, OUTPUT);
 }
 
 void set_interrupt_out(int pin_num, bool on) { digitalWrite(pin_num, on); }
 
 void init_onboard_button() {
-  // gpio_config_t btn_config ={};
-  // btn_config.intr_type = GPIO_INTR_ANYEDGE; //Enable interrupt on both rising
-  // and falling edges
-  // btn_config.mode = GPIO_MODE_INPUT;                // Set as Input
-  // btn_config.pin_bit_mask = (1 << BUTTON_GPIO);     // Bitmask
-  // btn_config.pull_up_en = GPIO_PULLUP_ENABLE;       // Disable pullup
-  // btn_config.pull_down_en = GPIO_PULLDOWN_DISABLE;  // Enable pulldown
-  // gpio_config(&btn_config);
   pinMode(BUTTON_GPIO, INPUT);
 }
 
