@@ -193,7 +193,10 @@ double PrefManager::read_double(const char* key, double def) {
   error_t err = nvs_get_blob(nvs, key, buff, &len);
   switch (err) {
     case ERROR_OK:
-      val = bytes_to_double(buff);
+      doubleConv b2d;
+      memcpy(b2d.b, buff, 8);
+      val = b2d.d;
+      // val = bytes_to_double(buff);
       log_d(TAG, "Pref read: %s = %f", key, val);
       break;
     case ESP_ERR_NVS_NOT_FOUND:
@@ -210,7 +213,10 @@ double PrefManager::read_double(const char* key, double def) {
 
 void PrefManager::write_double(const char* key, double val) {
   uint8_t buff[8];
-  double_to_bytes(val, buff);
+  doubleConv d2b;
+  d2b.d = val;
+  memcpy(buff, d2b.b, 8);
+  // double_to_bytes(val, buff);
   error_t err = nvs_set_blob(nvs, key, buff, 8);
   switch (err) {
     case ERROR_OK:
@@ -233,7 +239,10 @@ float PrefManager::read_float(const char* key, float def) {
   error_t err = nvs_get_blob(nvs, key, buff, &len);
   switch (err) {
     case ERROR_OK:
-      val = bytes_to_float(buff);
+      floatConv b2f;
+      memcpy(b2f.b, buff, 4);
+      val = b2f.f;
+      // val = bytes_to_float(buff);
       log_d(TAG, "Pref read: %s = %f", key, val);
       break;
     case ESP_ERR_NVS_NOT_FOUND:
@@ -250,7 +259,10 @@ float PrefManager::read_float(const char* key, float def) {
 
 void PrefManager::write_float(const char* key, float val) {
   uint8_t buff[4];
-  float_to_bytes(val, buff);
+  floatConv f2b;
+  f2b.f = val;
+  memcpy(buff, f2b.b, 4);
+  // float_to_bytes(val, buff);
   error_t err = nvs_set_blob(nvs, key, buff, 4);
   switch (err) {
     case ERROR_OK:

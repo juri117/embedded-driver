@@ -23,7 +23,16 @@
 
 #include "driver/driver.h"
 #include "log.h"
-#include "utils/converterUtils.h"
+
+typedef union {
+  float f;
+  unsigned char b[4];
+} floatConv;
+
+typedef union {
+  double d;
+  unsigned char b[sizeof(double)];
+} doubleConv;
 
 class PrefManager {
  private:

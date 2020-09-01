@@ -6,13 +6,13 @@ static const char* TAG = "spiUtils";
 
 Semaphore spiSemaphore;
 
-void spi_init() {
+void spi_init(gpio_num_t miso_gpio, gpio_num_t mosi_gpio, gpio_num_t clk_gpio) {
   // spiSemaphore = Semaphore();
 
   spi_bus_config_t buscfg = {};
-  buscfg.miso_io_num = PIN_NUM_MISO;
-  buscfg.mosi_io_num = PIN_NUM_MOSI;
-  buscfg.sclk_io_num = PIN_NUM_CLK;
+  buscfg.miso_io_num = miso_gpio;
+  buscfg.mosi_io_num = mosi_gpio;
+  buscfg.sclk_io_num = clk_gpio;
   buscfg.quadwp_io_num = -1;
   buscfg.quadhd_io_num = -1;
   buscfg.max_transfer_sz = 320 * 2 * 8;

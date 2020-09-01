@@ -35,7 +35,7 @@
 #define SPI_SEMAPHORE_MAX_WAIT_MS 200
 #define SPI_SEMAPHORE_MAX_WAIT_SETUP_MS 1000
 
-void spi_init();
+void spi_init(gpio_num_t miso_gpio, gpio_num_t mosi_gpio, gpio_num_t clk_gpio);
 spi_device_handle_t spi_add_device(int ss_pin);
 error_t spi_send(spi_device_handle_t dev, uint8_t* txBuff, uint8_t* rxBuff,
                  uint16_t len);

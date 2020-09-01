@@ -6,7 +6,7 @@
 
 //#define SPI_UTILS_TAG "i2cUtils"
 
-static const char *TAG = "i2cUtils";
+static const char *TAG = "i2c";
 
 #define I2C_MASTER_FREQ_HZ 100000 /*!< I2C master clock frequency */
 #define ACK_CHECK_EN \

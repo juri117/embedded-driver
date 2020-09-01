@@ -33,6 +33,9 @@ typedef int adc_input_t;
 #define ON 1
 #define OFF 0
 
+#define LED_GPIO 24     // just a suggestion
+#define BUTTON_GPIO 23  // just a suggestion
+
 void init_gpio_isr_service();
 error_t register_gpio_interrupt(int gpio_num, void (*function)(), void* args);
 void init_nvs();

@@ -5,10 +5,11 @@ static const char* TAG = "spiUtils";
 
 Semaphore spiSemaphore;
 
-void spi_init() {}
+void spi_init(gpio_num_t miso_gpio, gpio_num_t mosi_gpio, gpio_num_t clk_gpio) {
+}
 
-spi_device_handle_t spi_add_device(int ss_pin) { 
-  if(wiringPiSPISetup(0, 1 * 1000 * 1000)>0){
+spi_device_handle_t spi_add_device(int ss_pin) {
+  if (wiringPiSPISetup(0, 1 * 1000 * 1000) > 0) {
     return 0;
   }
   // failed
@@ -27,12 +28,10 @@ spi_device_handle_t spi_add_device(int ss_pin) {
  */
 error_t spi_send(spi_device_handle_t dev, uint8_t* txBuff, uint8_t* rxBuff,
                  uint16_t len) {
-  wiringPiSPIDataRW(dev, (unsigned char *)txBuff, len);
+  wiringPiSPIDataRW(dev, (unsigned char*)txBuff, len);
   memcpy(rxBuff, txBuff, len);
   return ERROR_OK;
 }
 
-void setup_spi_ready_interrupt(int intr_pin) {
-  pinMode(intr_pin, INPUT);
-}
+void setup_spi_ready_interrupt(int intr_pin) { pinMode(intr_pin, INPUT); }
 #endif
