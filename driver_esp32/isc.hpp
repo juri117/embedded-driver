@@ -18,9 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../error.h"
-#include "def.h"
-#include "driver/driver.h"
+#include "../error.hpp"
+#include "driver/driver.hpp"
 
 #define ISC_ACK_VAL 0x0
 #define ISC_NACK_VAL 0x1

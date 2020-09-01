@@ -1,4 +1,4 @@
-#include "task.h"
+#include "task.hpp"
 
 #if BUILD_TARGET == TARGET_PI3
 

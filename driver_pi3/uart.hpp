@@ -19,9 +19,8 @@
 #include <wiringPi.h>
 #include <wiringSerial.h>
 
-#include "../error.h"
-#include "def.h"
-#include "log.h"
+#include "../error.hpp"
+#include "log.hpp"
 
 #define UART_NUM_0 0
 #define UART_NUM_1 1

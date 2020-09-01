@@ -1,4 +1,4 @@
-#include "task.h"
+#include "task.hpp"
 
 #if BUILD_TARGET == TARGET_ESP32
 
@@ -9,9 +9,7 @@ void start_task(TaskFunction_t pvTaskCode, const char* const pcName,
 
 void task_delay_ms(uint32_t delay_ms) { vTaskDelay(pdMS_TO_TICKS(delay_ms)); }
 
-void end_task(){
-  vTaskDelete(NULL);
-}
+void end_task() { vTaskDelete(NULL); }
 
 DelayUntil::DelayUntil() { this->last_wake_tick = xTaskGetTickCount(); };
 void DelayUntil::wait_for(uint32_t wait_ms) {

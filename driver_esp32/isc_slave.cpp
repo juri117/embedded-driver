@@ -1,6 +1,6 @@
 
 
-#include "isc_slave.h"
+#include "isc_slave.hpp"
 
 #if BUILD_TARGET == TARGET_ESP32
 

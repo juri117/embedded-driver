@@ -14,7 +14,7 @@
 
 #include <mutex>
 
-#include "../error.h"
+#include "../error.hpp"
 
 class Semaphore {
  private:

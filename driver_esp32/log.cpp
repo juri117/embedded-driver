@@ -1,4 +1,4 @@
-#include "log.h"
+#include "log.hpp"
 #if BUILD_TARGET == TARGET_ESP32
 
 void log_buffer(const char* tag, uint8_t* buff, uint16_t len) {

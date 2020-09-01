@@ -1,6 +1,6 @@
 
 
-#include "misc.h"
+#include "misc.hpp"
 
 #if BUILD_TARGET == TARGET_PI3
 
@@ -23,19 +23,13 @@ error_t register_gpio_interrupt(int gpio_num, void (*function)(), void *args) {
 
 void init_nvs() {}
 
-void init_onboard_led() {
-  pinMode(LED_GPIO, OUTPUT);
-}
+void init_onboard_led() { pinMode(LED_GPIO, OUTPUT); }
 
-void init_interrupt_out(int pin_num) {
-  pinMode(pin_num, OUTPUT);
-}
+void init_interrupt_out(int pin_num) { pinMode(pin_num, OUTPUT); }
 
 void set_interrupt_out(int pin_num, bool on) { digitalWrite(pin_num, on); }
 
-void init_onboard_button() {
-  pinMode(BUTTON_GPIO, INPUT);
-}
+void init_onboard_button() { pinMode(BUTTON_GPIO, INPUT); }
 
 void set_led(bool on) { digitalWrite(LED_GPIO, on); }
 

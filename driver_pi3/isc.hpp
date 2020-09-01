@@ -15,9 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../error.h"
-#include "def.h"
-#include "log.h"
+#include "../error.hpp"
+#include "log.hpp"
 
 #define I2C_NUM_0 0
 #define I2C_NUM_1 1

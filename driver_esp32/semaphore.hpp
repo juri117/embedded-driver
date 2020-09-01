@@ -20,7 +20,7 @@
 #include <freertos/semphr.h>
 #include <freertos/task.h>
 
-#include "../error.h"
+#include "../error.hpp"
 
 class Semaphore {
  private:

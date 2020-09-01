@@ -22,10 +22,9 @@
 #include <memory>
 #include <string>
 
-#include "../error.h"
-#include "def.h"
-#include "log.h"
-#include "semaphore.h"
+#include "../error.hpp"
+#include "log.hpp"
+#include "semaphore.hpp"
 
 typedef uint8_t spi_device_handle_t;
 

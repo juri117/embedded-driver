@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef DRIVER_DRIVER_PI_ISC_SLAVE_H
-#define DRIVER_DRIVER_PI_ISC_SLAVE_H
+#ifndef DRIVER_DRIVER_ESP32_ISC_SLAVE_H
+#define DRIVER_DRIVER_ESP32_ISC_SLAVE_H
 
 #include <driver/i2c.h>
 #include <esp_err.h>
@@ -18,9 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../error.h"
-#include "def.h"
-#include "driver/driver.h"
+#include "../error.hpp"
+#include "driver/driver.hpp"
 
 #define ISC_ACK_VAL 0x0
 #define ISC_NACK_VAL 0x1
@@ -35,4 +34,4 @@ error_t isc_reset_tx(i2c_port_t port);
 error_t isc_slave_write_bytes(i2c_port_t port, uint8_t *data, uint16_t size,
                               uint32_t timeout_ms);
 
-#endif /* DRIVER_DRIVER_PI_ISC_SLAVE_H */
+#endif /* DRIVER_DRIVER_ESP32_ISC_SLAVE_H */

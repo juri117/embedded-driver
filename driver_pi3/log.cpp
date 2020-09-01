@@ -1,4 +1,4 @@
-#include "log.h"
+#include "log.hpp"
 
 #if BUILD_TARGET == TARGET_PI3
 

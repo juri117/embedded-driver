@@ -24,8 +24,7 @@
 #include <soc/timer_group_struct.h>
 #include <stdio.h>
 
-#include "../error.h"
-#include "def.h"
+#include "../error.hpp"
 
 typedef adc1_channel_t adc_input_t;
 

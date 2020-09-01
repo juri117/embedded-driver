@@ -21,8 +21,8 @@
 #include <cstring>
 #include <iostream>
 
-#include "driver/driver.h"
-#include "log.h"
+#include "driver/driver.hpp"
+#include "log.hpp"
 
 typedef union {
   float f;

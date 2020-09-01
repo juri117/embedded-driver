@@ -27,10 +27,9 @@
 #include <memory>
 #include <string>
 
-#include "../error.h"
-#include "def.h"
-#include "driver/driver.h"
-#include "semaphore.h"
+#include "../error.hpp"
+#include "driver/driver.hpp"
+#include "semaphore.hpp"
 
 #define SPI_SEMAPHORE_MAX_WAIT_MS 200
 #define SPI_SEMAPHORE_MAX_WAIT_SETUP_MS 1000

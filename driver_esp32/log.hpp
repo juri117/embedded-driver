@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../error.h"
+#include "../error.hpp"
 #include "sdkconfig.h"
 
 typedef enum {

@@ -20,7 +20,7 @@
 #include <queue>
 #include <thread>
 
-#include "../error.h"
+#include "../error.hpp"
 
 #define BIT31 0x80000000
 #define BIT30 0x40000000

@@ -17,7 +17,7 @@
 #include <driver/uart.h>
 #include <esp_system.h>
 
-#include "../error.h"
+#include "../error.hpp"
 
 uint32_t get_time_system_ms();
 uint64_t get_time_system_us();

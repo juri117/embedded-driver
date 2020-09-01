@@ -20,7 +20,7 @@
 #include <freertos/event_groups.h>
 #include <freertos/task.h>
 
-#include "../error.h"
+#include "../error.hpp"
 
 typedef EventBits_t event_bit_t;
 

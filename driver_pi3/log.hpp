@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../error.h"
+#include "../error.hpp"
 
 typedef enum {
   LOG_NONE,  /*!< No log output */

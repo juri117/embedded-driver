@@ -1,5 +1,5 @@
 
-#include "uart.h"
+#include "uart.hpp"
 #if BUILD_TARGET == TARGET_PI3
 
 static const char* TAG = "uart";

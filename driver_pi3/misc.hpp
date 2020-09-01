@@ -24,9 +24,8 @@
 
 #include <functional>
 
-#include "../error.h"
-#include "def.h"
-#include "log.h"
+#include "../error.hpp"
+#include "log.hpp"
 
 typedef int adc_input_t;
 

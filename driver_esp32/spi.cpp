@@ -1,4 +1,4 @@
-#include "spi.h"
+#include "spi.hpp"
 
 #if BUILD_TARGET == TARGET_ESP32
 

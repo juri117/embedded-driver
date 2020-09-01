@@ -1,4 +1,4 @@
-#include "semaphore.h"
+#include "semaphore.hpp"
 
 #if BUILD_TARGET == TARGET_ESP32
 
