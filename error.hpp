@@ -16,6 +16,7 @@ typedef int error_t;
 
 #define ERROR_OK 0
 #define ERROR_FAIL -1
+#define ERROR_NOT_IMPLEMENTED -7
 #define ERROR_TIMEOUT 0x107
 
 #endif /* DRIVER_DRIVER_ERROR_H */
