@@ -21,6 +21,7 @@
 
 #include "../error.hpp"
 #include "log.hpp"
+#include "types.hpp"
 
 #define UART_NUM_0 0
 #define UART_NUM_1 1
@@ -29,10 +30,6 @@
 #define UART_NUM_4 4
 #define UART_NUM_5 5
 #define UART_COUNT 6
-
-typedef int uart_port_t;
-typedef const char* uart_name_t;
-typedef int gpio_num_t;
 
 void uart_init(uart_port_t uart_num, uart_name_t uart_name, gpio_num_t dummy,
                int baudRate);

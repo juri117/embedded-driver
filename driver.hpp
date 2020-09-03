@@ -37,6 +37,7 @@
 #include "driver_pi3/spi.hpp"
 #include "driver_pi3/task.hpp"
 #include "driver_pi3/time.hpp"
+#include "driver_pi3/types.hpp"
 #include "driver_pi3/uart.hpp"
 #endif
 

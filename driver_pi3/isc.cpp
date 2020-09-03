@@ -138,34 +138,7 @@ error_t isc_master_init(i2c_port_t port, gpio_num_t sda, gpio_num_t scl) {
   return ERROR_FAIL;
 }
 
-/**
- * @brief initializes i2c as slave
- *
- * @param port
- * @param sda
- * @param scl
- * @param address
- * @return error_t
- */
-error_t isc_slave_init(i2c_port_t port, gpio_num_t sda, gpio_num_t scl,
-                       uint16_t address) {
-  // TODO:
-  return ERROR_FAIL;
-}
-
-int isc_slave_read_bytes(i2c_port_t i2c_num, uint8_t *data_rd, uint16_t size,
-                         uint32_t timeout_ms) {
-  // TODO:
-  return 0;
-}
-
 error_t isc_reset_tx(i2c_port_t port) {
-  // TODO:
-  return ERROR_FAIL;
-}
-
-error_t isc_slave_write_bytes(i2c_port_t port, uint8_t *data, uint16_t size,
-                              uint32_t timeout_ms) {
   // TODO:
   return ERROR_FAIL;
 }

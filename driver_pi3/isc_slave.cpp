@@ -35,8 +35,6 @@ int isc_slave_read_bytes(i2c_port_t i2c_num, uint8_t *data_rd, uint16_t size,
   return -1;
 }
 
-error_t isc_reset_tx(i2c_port_t port) { return ERROR_FAIL; }
-
 error_t isc_slave_write_bytes(i2c_port_t port, uint8_t *data, uint16_t size,
                               uint32_t timeout_ms) {
   return ERROR_FAIL;

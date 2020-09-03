@@ -25,8 +25,7 @@
 #include "../error.hpp"
 #include "log.hpp"
 #include "semaphore.hpp"
-
-typedef uint8_t spi_device_handle_t;
+#include "types.hpp"
 
 #define SPI_SEMAPHORE_MAX_WAIT_MS 200
 #define SPI_SEMAPHORE_MAX_WAIT_SETUP_MS 1000
