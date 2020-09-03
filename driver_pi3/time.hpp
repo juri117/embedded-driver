@@ -17,6 +17,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include <chrono>
+
 #include "../error.hpp"
 
 uint32_t get_time_system_ms();
