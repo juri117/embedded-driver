@@ -35,9 +35,12 @@ void set_led(bool on) { digitalWrite(LED_GPIO, on); }
 
 bool button_is_pressed() { return digitalRead(BUTTON_GPIO); }
 
-void reboot() {}
+void reboot() {
+  // std::exit(42);
+  system("reboot");
+}
 
-void sleep() {}
+void sleep() { system("shutdown"); }
 
 uint64_t get_efuse_mac() {
   uint8_t mac_buff[6];
