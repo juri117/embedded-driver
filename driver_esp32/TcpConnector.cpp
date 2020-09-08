@@ -373,16 +373,16 @@ bool TcpConnector::connect_to_server(const uint8_t* host_ip,
 
   server_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
   if (server_sock < 0) {
-    log_e(TAG, "tcp_client: Unable to create socket: errno %d, ret %d",
-          (int)errno, server_sock);
+    log_e(TAG, "tcp_client: Unable to create socket: %s, ret %d",
+          strerror(errno), server_sock);
     task_delay_ms(InternetReconnectTryPause);
   } else {
     log_i(TAG, "tcp_client: Socket created");
     int err =
         connect(server_sock, (struct sockaddr*)&dest_addr, sizeof(dest_addr));
     if (err != 0) {
-      log_w(TAG, "tcp_client: Socket unable to connect to server: errno %d",
-            errno);
+      log_w(TAG, "tcp_client: Socket unable to connect to server: %s",
+            strerror(errno));
       // task_delay_ms(ServerReconnectTryPause);
     } else {
       tcp_connected = true;
@@ -445,8 +445,8 @@ int TcpConnector::write_bytes(uint8_t* bytes, uint16_t len) {
     //        bytes[USR_CMD_COUNT_BYTE_OFFSET], err,
     //        bytes[USR_CMD_CMD_BYTE_OFFSET]);
     if (err < 0) {
-      printf("TcpConnector: Error occured during sending: errno %d, ret %d",
-             errno, err);
+      printf("TcpConnector: Error occured during sending: errno %s, ret %d",
+             strerror(errno), err);
       this->send_error_counter++;
       if (this->send_error_counter >= SEND_FAIL_MAX_FOR_DISCONNECT) {
         printf("TcpConnector: hit send fail max, disconnect!");
