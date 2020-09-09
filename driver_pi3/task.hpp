@@ -92,7 +92,7 @@ class TaskEventVar {
   TaskEventVar() : cond_bits(0) {}
   void set(uint32_t bits) {
     for (uint8_t i = 0; i < 8; i++) {
-      if (bits & (1 << i) > 0) {
+      if ((bits & (1 << i)) > 0) {
         std::lock_guard<std::mutex> lk(cv_m[i]);
         this->cond_bits = this->cond_bits | bits;
         cv[i].notify_all();
@@ -101,7 +101,7 @@ class TaskEventVar {
   }
   bool wait_for(uint32_t bits) {
     for (uint8_t i = 0; i < 8; i++) {
-      if (bits & (1 << i) > 0) {
+      if ((bits & (1 << i)) > 0) {
         std::unique_lock<std::mutex> lk(cv_m[i]);
         cv[i].wait(lk);
         return true;
@@ -113,7 +113,7 @@ class TaskEventVar {
   }
   bool wait_for(uint32_t bits, uint32_t timeout_ms) {
     for (uint8_t i = 0; i < 8; i++) {
-      if (bits & (1 << i) > 0) {
+      if ((bits & (1 << i)) > 0) {
         std::unique_lock<std::mutex> lk(cv_m[i]);
         cv[i].wait_for(lk, std::chrono::milliseconds(timeout_ms));
         return true;
