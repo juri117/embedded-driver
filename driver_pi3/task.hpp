@@ -115,8 +115,11 @@ class TaskEventVar {
     for (uint8_t i = 0; i < 8; i++) {
       if ((bits & (1 << i)) > 0) {
         std::unique_lock<std::mutex> lk(cv_m[i]);
-        cv[i].wait_for(lk, std::chrono::milliseconds(timeout_ms));
-        return true;
+        if (cv[i].wait_for(lk, std::chrono::milliseconds(timeout_ms)) ==
+            std::cv_status::no_timeout) {
+          return true;
+        }
+        return false;
       }
     }
     return false;
