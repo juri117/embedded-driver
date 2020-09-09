@@ -21,6 +21,8 @@
 
 #include "../error.hpp"
 #include "log.hpp"
+#include "task.hpp"
+#include "time.hpp"
 #include "types.hpp"
 
 #define UART_NUM_0 0

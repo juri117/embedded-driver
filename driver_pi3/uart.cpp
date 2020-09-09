@@ -23,21 +23,31 @@ void uart_init_driver(uart_port_t uart_num, int rx_buffer_size,
 
 int uart_read(uart_port_t uart_num, uint8_t* buff, uint32_t length,
               uint32_t timeout_ms) {
+  uint32_t start = get_time_system_ms();
   if (uart_fd[uart_num] < 0) {
     return ERROR_FAIL;
   }
-  int read_len = serialDataAvail(uart_fd[uart_num]);
-  if (read_len <= 0) {
-    return 0;
-  }
-  if (read_len > length) {
-    read_len = length;
-  }
-  for (int i = 0; i < read_len; i++) {
-    buff[i] = serialGetchar(uart_fd[uart_num]);
+  int read_len = 0;
+  while (read_len <= 0) {
+    read_len = serialDataAvail(uart_fd[uart_num]);
+    if (read_len > 0) {
+      if (read_len > length) {
+        read_len = length;
+      }
+      for (int i = 0; i < read_len; i++) {
+        buff[i] = serialGetchar(uart_fd[uart_num]);
+      }
+      return read_len;
+    }
+    if (get_time_system_ms() - start >= timeout_ms) {
+      return ERROR_TIMEOUT;
+    } else {
+      task_delay_ms(10);
+    }
   }
   return read_len;
 }
+
 int uart_write(uart_port_t uart_num, const uint8_t* buff, uint32_t len) {
   if (uart_fd[uart_num] < 0) {
     return ERROR_FAIL;
