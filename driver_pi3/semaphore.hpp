@@ -18,7 +18,7 @@
 
 class Semaphore {
  private:
-  std::mutex sema;
+  std::timed_mutex sema;
 
  public:
   Semaphore();
