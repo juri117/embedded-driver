@@ -37,10 +37,10 @@ bool button_is_pressed() { return digitalRead(BUTTON_GPIO); }
 
 void reboot() {
   // std::exit(42);
-  system("reboot");
+  system("sudo reboot now");
 }
 
-void sleep() { system("shutdown"); }
+void sleep() { system("sudo shutdown now"); }
 
 uint64_t get_efuse_mac() {
   uint8_t mac_buff[6];
