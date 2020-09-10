@@ -25,6 +25,7 @@ int uart_read(uart_port_t uart_num, uint8_t* buff, uint32_t length,
               uint32_t timeout_ms) {
   uint32_t start = get_time_system_ms();
   if (uart_fd[uart_num] < 0) {
+    task_delay_ms(timeout_ms);
     return ERROR_FAIL;
   }
   int read_len = 0;
