@@ -206,27 +206,33 @@ uint16_t PrefManager::read_ary(const char *key, uint8_t *ary,
     log_d(TAG, "could not read: %s", key);
     return 0;
   }
-  if (this->doc[key].IsString()) {
-    memcpy(ary, this->doc[key].GetString(), this->doc[key].GetStringLength());
-    log_d(TAG, "read: %s = ", key, this->doc[key].GetString());
-    log_buffer(TAG, (uint8_t *)this->doc[key].GetString(),
-               this->doc[key].GetStringLength());
-    return this->doc[key].GetStringLength();
+  if (this->doc[key].IsArray()) {
+    if (this->doc[key].Size() > exp_len) {
+      log_w(TAG, "array %s is bigger than expected: %d but is &d", key, exp_len,
+            this->doc[key].Size());
+    }
+    for (uint16_t i = 0; i < this->doc[key].Size(); i++) {
+      ary[i] = (uint8_t)this->doc[key][i].GetInt();
+    }
   }
-  return 0;
+  return this->doc[key].Size();
 }
 
 void PrefManager::write_ary(const char *key, uint8_t *ary, uint16_t len) {
   if (this->doc.HasMember(key)) {
-    this->doc[key].SetString((const char *)ary, len);
+    this->doc[key].Clear();
+    for (uint16_t i = 0; i < len; i++) {
+      this->doc[key].PushBack(ary[i], this->doc.GetAllocator());
+    }
     return;
   }
-  // char val[len + 1];
-  // memcpy(val, ary, len);
-  // val[len] = 0x00;
-  Value val;
-  val.SetString((const char *)ary, len, this->doc.GetAllocator());
-  this->doc.AddMember(StringRef(key), val, this->doc.GetAllocator());
+  rapidjson::Value myArray(rapidjson::kArrayType);
+  for (uint16_t i = 0; i < len; i++) {
+    rapidjson::Value objValue;
+    objValue.SetInt(ary[i]);
+    myArray.PushBack(objValue, this->doc.GetAllocator());
+  }
+  this->doc.AddMember(StringRef(key), myArray, this->doc.GetAllocator());
 }
 
 uint16_t PrefManager::read_str(const char *key, uint8_t *ary,
