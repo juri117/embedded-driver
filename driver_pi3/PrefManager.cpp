@@ -39,7 +39,7 @@ void PrefManager::commit() {
   char writeBuffer[65536];
   FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
-  Writer<FileWriteStream> writer(os);
+  PrettyWriter<FileWriteStream> writer(os);
   this->doc.Accept(writer);
 
   fclose(fp);
