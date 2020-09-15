@@ -54,7 +54,7 @@ error_t get_efuse_mac(uint8_t *mac) {
   struct ifreq s;
   int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
-  strcpy(s.ifr_name, "eth0");
+  strcpy(s.ifr_name, "wlan0");
   if (0 == ioctl(fd, SIOCGIFHWADDR, &s)) {
     memcpy(mac, s.ifr_addr.sa_data, 6);
     return ERROR_OK;
