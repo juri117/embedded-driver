@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <wiringPiI2C.h>
 
 #include "../error.hpp"
 #include "log.hpp"
@@ -27,6 +28,8 @@
 #define ISC_NACK_VAL 0x1
 
 #define ISC_ACK_CHECK_ENABLE 0x01
+
+#define ISC_ADDRESS_COUNT 0xFF
 
 void isc_scan(i2c_port_t port);
 error_t isc_probe(i2c_port_t port, uint8_t address);
@@ -44,5 +47,7 @@ int isc_master_write_register(i2c_port_t i2c_num, uint16_t address,
 error_t isc_master_init(i2c_port_t port, gpio_num_t sda, gpio_num_t scl);
 
 error_t isc_reset_tx(i2c_port_t port);
+
+error_t isc_master_connect_device(uint16_t address);
 
 #endif /* DRIVER_DRIVER_PI3_ISC_H */
