@@ -67,4 +67,8 @@ class Adc {
   uint32_t calc_voltage(uint32_t adc_reading);
 };
 
+uint16_t get_cpu_load_total();
+uint16_t get_cpu_load_this_process();
+uint16_t get_cpu_temp();
+
 #endif /* DRIVER_DRIVER_ESP32_MISC_H */

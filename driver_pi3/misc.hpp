@@ -15,15 +15,24 @@
 #include <errno.h>
 #include <linux/if.h>
 #include <netdb.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <unistd.h>
 #include <wiringPi.h>
 
+#include <array>
+#include <cstdio>
+#include <fstream>
 #include <functional>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 #include "../error.hpp"
 #include "log.hpp"
@@ -64,5 +73,11 @@ class Adc {
   uint32_t read_raw();
   uint32_t calc_voltage(uint32_t adc_reading);
 };
+
+uint16_t get_cpu_load_total();
+uint16_t get_cpu_load_this_process();
+uint16_t get_cpu_temp();
+
+std::string exec(const char* cmd);
 
 #endif /* DRIVER_DRIVER_PI3_MISC_H */
