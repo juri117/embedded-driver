@@ -45,9 +45,43 @@ TcpConnector::TcpConnector()
 
 void TcpConnector::init(uint8_t mode, const uint8_t* ssid, const uint8_t* pw) {
   this->mode = mode;
+  if (this->mode != WIFI_SOCK_MODE_OFF) {
+    switch (this->mode) {
+      case WIFI_SOCK_MODE_STA_CL:
+        this->init_as_sta(ssid, pw);
+        break;
+      case WIFI_SOCK_MODE_AP_CL:
+        this->init_as_ap(ssid, pw);
+        break;
+      default:
+        log_w(TAG, "Unknown wifi mode: %d", mode);
+        return;
+    }
+  }
 }
 
-void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {}
+void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
+  // char result[PATH_MAX];
+  // memset(result, 0x00, PATH_MAX);
+  // getcwd(result, FILENAME_MAX);
+  // uint8_t cmd_buff[PATH_MAX];
+  // memset(cmd_buff, 0x00, PATH_MAX);
+  // sprintf(
+  //     (char*)cmd_buff,
+  //     "sudo python %s/main/driver/driver_pi/add_wifi_network.py \"%s\"
+  //     \"%s\"", result, ssid, pw);
+  uint8_t script_path[PATH_MAX];
+  if (!find_script("add_wifi_network.py", script_path, PATH_MAX)) {
+    log_w(TAG, "could not find add_wifi_network.py");
+    return;
+  }
+  uint8_t cmd_buff[PATH_MAX];
+  memset(cmd_buff, 0x00, PATH_MAX);
+  sprintf((char*)cmd_buff, "sudo python %s \"%s\" \"%s\"", script_path, ssid,
+          pw);
+  std::string res = exec((const char*)cmd_buff);
+  log_i(TAG, "add wifi ssid + pw: %s", res.c_str());
+}
 
 void TcpConnector::init_as_ap(const uint8_t* ssid, const uint8_t* pw) {}
 

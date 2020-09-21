@@ -14,6 +14,7 @@
 
 #include <arpa/inet.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -24,6 +25,7 @@
 #include "../error.hpp"
 #include "log.hpp"
 #include "task.hpp"
+#include "utils.hpp"
 
 #define WIFI_SOCK_MODE_OFF 0x00
 // #define WIFI_SOCK_MODE_STA 0x01     // wifi client, tcp server

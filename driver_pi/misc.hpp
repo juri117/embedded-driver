@@ -36,6 +36,7 @@
 
 #include "../error.hpp"
 #include "log.hpp"
+#include "utils.hpp"
 
 typedef int adc_input_t;
 
