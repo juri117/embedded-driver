@@ -81,7 +81,6 @@ class DelayUntil {
   void wait_for(uint32_t wait_ms);
 };
 
-// FIXME: this is unlikely the best solution
 class TaskEventVar {
  private:
   std::condition_variable cv[8];

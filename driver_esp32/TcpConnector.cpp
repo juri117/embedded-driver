@@ -201,12 +201,8 @@ void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
 
   // ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
   wifi_config_t wifi_config = {};
-
-  // settings.get_wifi_ssid(wifi_config.sta.ssid);
-  // settings.get_wifi_pw(wifi_config.sta.password);
-  // FIXME: reals sting len here
-  memcpy(wifi_config.sta.ssid, ssid, 32);
-  memcpy(wifi_config.sta.password, pw, 32);
+  memcpy(wifi_config.sta.ssid, ssid, strlen((const char*)ssid));
+  memcpy(wifi_config.sta.password, pw, strlen((const char*)pw));
   wifi_config.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
   wifi_config.sta.pmf_cfg.capable = true;
   wifi_config.sta.pmf_cfg.required = false;
@@ -264,7 +260,6 @@ void TcpConnector::init_as_ap(const uint8_t* ssid, const uint8_t* pw) {
   wifi_config_t ap_config = {};
   ap_config.ap = {};
 
-  // FIXME: reals sting len here
   memcpy(ap_config.ap.ssid, ssid, strlen((const char*)ssid));
   ap_config.ap.ssid_len = strlen((const char*)ssid);
   memcpy(ap_config.ap.password, pw, strlen((const char*)pw));

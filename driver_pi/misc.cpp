@@ -70,4 +70,39 @@ uint32_t Adc::read_raw() { return 0; }
 
 uint32_t Adc::calc_voltage(uint32_t adc_reading) { return 0; }
 
+uint16_t get_cpu_load_total() {
+  std::ifstream file;
+  char buff[1024];
+  float load;
+  file.open("/proc/loadavg");
+  if (file.bad()) {
+    return ERROR_FAIL;
+  }
+  file.read(buff, sizeof(buff) - 1);
+  sscanf(buff, "%f", &load);
+  file.close();
+  return (uint16_t)(load * 10000);
+}
+
+uint16_t get_cpu_load_this_process() {
+  std::string res = exec("ps -C \"main\" -o \%cpu,\%mem");
+  float load, mem;
+  int n = sscanf(res.c_str(), "%*s %*s %f %f", &load, &mem);
+  return (uint8_t)(load * 10000);
+}
+
+uint16_t get_cpu_temp() {
+  uint16_t millideg;
+  char buff[1024];
+  std::ifstream file;
+  file.open("/sys/class/thermal/thermal_zone0/temp");
+  if (file.bad()) {
+    return ERROR_FAIL;
+  }
+  file.read(buff, sizeof(buff) - 1);
+  sscanf(buff, "%d", &millideg);
+  file.close();
+  return millideg;
+}
+
 #endif

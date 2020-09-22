@@ -33,6 +33,11 @@
 #define UART_NUM_5 5
 #define UART_COUNT 6
 
+typedef struct {
+  int fd;
+  std::string name;
+} pi_uart_t;
+
 void uart_init(uart_port_t uart_num, uart_name_t uart_name, gpio_num_t dummy,
                int baudRate);
 
