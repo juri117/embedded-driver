@@ -18,6 +18,6 @@ typedef int error_t;
 #define ERROR_FAIL -1
 #define ERROR_NOT_IMPLEMENTED -7
 #define ERROR_TIMEOUT -9
-#define ERROR_INVALID_ARG 0x102
+#define ERROR_INVALID_ARG -2
 
 #endif /* DRIVER_DRIVER_ERROR_H */
