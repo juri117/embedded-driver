@@ -29,8 +29,8 @@ bool find_script(const char *script_name, uint8_t *script_path,
   getcwd(current_path, FILENAME_MAX);
 
   memset(script_path, 0x00, max_len);
-  sprintf((char *)script_path, "%s/main/driver/driver_pi/%s", current_path,
-          script_name);
+  sprintf((char *)script_path, "%s/main/driver/driver_pi/scripts/%s",
+          current_path, script_name);
   if (file_exists(script_path)) {
     return true;
   }

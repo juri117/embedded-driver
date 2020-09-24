@@ -72,7 +72,7 @@ void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
   //     \"%s\"", result, ssid, pw);
   uint8_t script_path[PATH_MAX];
   if (!find_script("add_wifi_network.py", script_path, PATH_MAX)) {
-    log_w(TAG, "could not find add_wifi_network.py");
+    log_e(TAG, "could not find add_wifi_network.py");
     return;
   }
   uint8_t cmd_buff[PATH_MAX];
