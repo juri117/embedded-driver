@@ -131,7 +131,7 @@ class TaskEventVar {
     // FIXME: just waits for the first bit now
     return this->wait_for(bits, timeout_ms);
   }
-  bool is_set(uint32_t bits) { return this->cond_bits & bits > 0; }
+  bool is_set(uint32_t bits) { return (this->cond_bits & bits) > 0; }
   void clear(uint32_t bits) {
     if (this->is_set(bits)) {
       this->cond_bits = this->cond_bits & ~bits;

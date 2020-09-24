@@ -1,9 +1,6 @@
 
 import sys
 
-ssid = "DiAvEn"
-pw = "Auto123!"
-
 if len(sys.argv) != 3:
     print('wrong number of parameter, requires ssid and pw as strings')
     sys.exit(-7)
