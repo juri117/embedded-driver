@@ -23,17 +23,24 @@ error_t register_gpio_interrupt(int gpio_num, void (*function)(), void *args) {
 
 void init_nvs() {}
 
-void init_onboard_led() { pinMode(LED_GPIO, OUTPUT); }
+void init_onboard_led() {
+  // pinMode(LED_GPIO, OUTPUT);
+  init_gpio_out(LED_GPIO);
+}
 
-void init_interrupt_out(int pin_num) { pinMode(pin_num, OUTPUT); }
+void set_led(bool on) { set_gpio_out(LED_GPIO, on); }
 
-void set_interrupt_out(int pin_num, bool on) { digitalWrite(pin_num, on); }
+void init_gpio_out(int pin_num) { pinMode(pin_num, OUTPUT); }
 
-void init_onboard_button() { pinMode(BUTTON_GPIO, INPUT); }
+void set_gpio_out(int pin_num, bool on) { digitalWrite(pin_num, on); }
 
-void set_led(bool on) { digitalWrite(LED_GPIO, on); }
+void init_onboard_button() { init_gpio_in(BUTTON_GPIO); }
 
-bool button_is_pressed() { return digitalRead(BUTTON_GPIO); }
+bool button_is_pressed() { return get_gpio_in(BUTTON_GPIO); }
+
+void init_gpio_in(int pin_num) { pinMode(pin_num, INPUT); }
+
+bool get_gpio_in(int pin_num) { return digitalRead(BUTTON_GPIO); }
 
 void reboot() {
   // std::exit(42);

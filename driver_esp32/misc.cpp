@@ -33,12 +33,11 @@ void init_nvs() {
   ESP_ERROR_CHECK(err);
 }
 
-void init_onboard_led() {
-  gpio_pad_select_gpio(LED_GPIO);                  // Set pin as GPIO
-  gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);  // Set as Output
-}
+void init_onboard_led() { init_gpio_out(LED_GPIO); }
 
-void init_interrupt_out(gpio_num_t pin_num) {
+void set_led(bool on) { set_gpio_out(LED_GPIO, on); }
+
+void init_gpio_out(gpio_num_t pin_num) {
   gpio_pad_select_gpio(pin_num);  // Set pin as GPIO
   gpio_set_direction(pin_num,
                      GPIO_MODE_OUTPUT);  // Set as Output with open drain
@@ -46,24 +45,22 @@ void init_interrupt_out(gpio_num_t pin_num) {
   gpio_pulldown_en(pin_num);
 }
 
-void set_interrupt_out(gpio_num_t pin_num, bool on) {
-  gpio_set_level(pin_num, on);
-}
+void set_gpio_out(gpio_num_t pin_num, bool on) { gpio_set_level(pin_num, on); }
 
-void init_onboard_button() {
+void init_onboard_button() { init_gpio_in(BUTTON_GPIO); }
+
+bool button_is_pressed() { return (not get_gpio_in(BUTTON_GPIO)); }
+
+void init_gpio_in(int pin_num) {
   gpio_config_t btn_config = {};
-  // btn_config.intr_type = GPIO_INTR_ANYEDGE; //Enable interrupt on both rising
-  // and falling edges
   btn_config.mode = GPIO_MODE_INPUT;                // Set as Input
-  btn_config.pin_bit_mask = (1 << BUTTON_GPIO);     // Bitmask
+  btn_config.pin_bit_mask = (1 << pin_num);         // Bitmask
   btn_config.pull_up_en = GPIO_PULLUP_ENABLE;       // Disable pullup
   btn_config.pull_down_en = GPIO_PULLDOWN_DISABLE;  // Enable pulldown
   gpio_config(&btn_config);
 }
 
-void set_led(bool on) { gpio_set_level(LED_GPIO, on); }
-
-bool button_is_pressed() { return (not gpio_get_level(BUTTON_GPIO)); }
+bool get_gpio_in(int pin_num) { return gpio_get_level(BUTTON_GPIO); }
 
 void reboot() { esp_restart(); }
 

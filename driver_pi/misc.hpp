@@ -56,8 +56,11 @@ void init_onboard_button();
 void set_led(bool on);
 bool button_is_pressed();
 
-void init_interrupt_out(int pin_num);
-void set_interrupt_out(int pin_num, bool on);
+void init_gpio_out(int pin_num);
+void set_gpio_out(int pin_num, bool on);
+
+void init_gpio_in(int pin_num);
+bool get_gpio_in(int pin_num);
 
 void reboot();
 

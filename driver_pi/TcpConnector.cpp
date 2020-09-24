@@ -14,7 +14,7 @@ extern int errno;
 
 #define CONFIG_IPV4
 
-int server_sock;
+// int server_sock;
 
 bool connected;
 // bool tcp_connected;
@@ -161,7 +161,9 @@ int TcpConnector::write_bytes(uint8_t* bytes, uint16_t len) {
   return -1;
 }
 
-bool TcpConnector::is_connected() { return server_sock > 0; }
+bool TcpConnector::is_connected() {
+  return this->is_wifi_connected() && this->is_tcp_connected();
+}
 bool TcpConnector::is_wifi_connected() { return this->wifi_connected; }
 bool TcpConnector::is_tcp_connected() { return this->tcp_connected; }
 
