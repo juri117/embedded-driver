@@ -45,19 +45,41 @@ TcpConnector::TcpConnector()
 
 void TcpConnector::init(uint8_t mode, const uint8_t* ssid, const uint8_t* pw) {
   this->mode = mode;
-  if (this->mode != WIFI_SOCK_MODE_OFF) {
-    switch (this->mode) {
-      case WIFI_SOCK_MODE_STA_CL:
-        this->init_as_sta(ssid, pw);
-        break;
-      case WIFI_SOCK_MODE_AP_CL:
-        this->init_as_ap(ssid, pw);
-        break;
-      default:
-        log_w(TAG, "Unknown wifi mode: %d", mode);
-        return;
-    }
+  switch (this->mode) {
+    case WIFI_SOCK_MODE_STA_CL:
+      this->enable_wifi();
+      this->init_as_sta(ssid, pw);
+      break;
+    case WIFI_SOCK_MODE_AP_CL:
+      this->enable_wifi();
+      this->init_as_ap(ssid, pw);
+      break;
+    case WIFI_SOCK_MODE_OFF:
+      this->disable_wifi();
+      break;
+    default:
+      log_w(TAG, "Unknown wifi mode: %d", mode);
+      return;
   }
+}
+
+bool TcpConnector::enable_wifi() {
+  log_i(TAG, "turn on wifi");
+  std::string res = exec("sudo ifconfig wlan0 up");
+  if (res.length() > 0) {
+    log_i(TAG, "enable_wifi returned an error: %s", res.c_str());
+    return false;
+  }
+  return true;
+}
+bool TcpConnector::disable_wifi() {
+  log_i(TAG, "turn off wifi");
+  std::string res = exec("sudo ifconfig wlan0 down");
+  if (res.length() > 0) {
+    log_i(TAG, "disable_wifi returned an error: %s", res.c_str());
+    return false;
+  }
+  return true;
 }
 
 void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {

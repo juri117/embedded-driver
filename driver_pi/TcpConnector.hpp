@@ -46,6 +46,9 @@ class TcpConnector {
   uint8_t send_error_counter;
   int sock;
 
+  bool enable_wifi();
+  bool disable_wifi();
+
  public:
   bool tcp_connected;
   bool wifi_connected;
