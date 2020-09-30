@@ -90,6 +90,28 @@ void PrefManager::write_u16(const char *key, uint16_t val) {
   this->doc.AddMember(StringRef(key), val, this->doc.GetAllocator());
 }
 
+int16_t PrefManager::read_i16(const char *key, int16_t def) {
+  if (!this->doc.HasMember(key)) {
+    log_d(TAG, "could not read: %s use default %d", key, def);
+    return def;
+  }
+  if (this->doc[key].IsUint()) {
+    int16_t val = this->doc[key].GetUint();
+    log_d(TAG, "read: %s = %d", key, val);
+    return val;
+  }
+  log_d(TAG, "could not read: %s use default %d", key, def);
+  return def;
+}
+
+void PrefManager::write_i16(const char *key, int16_t val) {
+  if (this->doc.HasMember(key)) {
+    this->doc[key] = val;
+    return;
+  }
+  this->doc.AddMember(StringRef(key), val, this->doc.GetAllocator());
+}
+
 uint32_t PrefManager::read_u32(const char *key, uint32_t def) {
   if (!this->doc.HasMember(key)) {
     log_d(TAG, "could not read: %s use default %d", key, def);

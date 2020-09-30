@@ -48,6 +48,8 @@ class PrefManager {
   void write_u8(const char* key, uint8_t val);
   uint16_t read_u16(const char* key, uint16_t def);
   void write_u16(const char* key, uint16_t val);
+  int16_t read_i16(const char* key, int16_t def);
+  void write_i16(const char* key, int16_t val);
   uint32_t read_u32(const char* key, uint32_t def);
   void write_u32(const char* key, uint32_t val);
   int32_t read_i32(const char* key, int32_t def);

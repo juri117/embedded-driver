@@ -94,6 +94,36 @@ void PrefManager::write_u16(const char* key, uint16_t val) {
   }
 }
 
+int16_t PrefManager::read_i16(const char* key, int16_t def) {
+  int16_t val = def;
+  error_t err = nvs_get_i16(nvs, key, &val);
+  switch (err) {
+    case ERROR_OK:
+      log_d(TAG, "Pref read: %s = %d", key, val);
+      break;
+    case ESP_ERR_NVS_NOT_FOUND:
+      log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
+      break;
+    default:
+      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+  }
+  return val;
+}
+
+void PrefManager::write_i16(const char* key, int16_t val) {
+  error_t err = nvs_set_i16(nvs, key, val);
+  switch (err) {
+    case ERROR_OK:
+      log_d(TAG, "Pref write: %s = %d", key, val);
+      break;
+    case ESP_ERR_NVS_NOT_FOUND:
+      log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
+      break;
+    default:
+      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+  }
+}
+
 uint32_t PrefManager::read_u32(const char* key, uint32_t def) {
   uint32_t val = def;
   error_t err = nvs_get_u32(nvs, key, &val);
