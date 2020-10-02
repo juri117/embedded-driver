@@ -80,7 +80,7 @@ class Adc {
 
 uint16_t get_cpu_load_total();
 uint16_t get_cpu_load_this_process();
-uint16_t get_cpu_temp();
+int16_t get_cpu_temp();
 
 std::string exec(const char* cmd);
 

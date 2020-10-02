@@ -96,6 +96,6 @@ uint32_t Adc::calc_voltage(uint32_t adc_reading) {
 
 uint16_t get_cpu_load_total() { return 0; }
 uint16_t get_cpu_load_this_process() { return 0; }
-uint16_t get_cpu_temp() { return 0; }
+int16_t get_cpu_temp() { return 0; }
 
 #endif

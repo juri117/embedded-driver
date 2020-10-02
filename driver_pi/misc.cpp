@@ -98,8 +98,8 @@ uint16_t get_cpu_load_this_process() {
   return (uint8_t)(load * 10000);
 }
 
-uint16_t get_cpu_temp() {
-  uint16_t millideg;
+int16_t get_cpu_temp() {
+  int16_t millideg;
   char buff[1024];
   std::ifstream file;
   file.open("/sys/class/thermal/thermal_zone0/temp");
