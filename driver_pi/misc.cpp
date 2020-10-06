@@ -49,6 +49,11 @@ void reboot() {
 
 void sleep() { system("sudo shutdown now"); }
 
+/**
+ * @brief Get mac address of wlan0
+ *
+ * @return uint64_t mac as one number
+ */
 uint64_t get_efuse_mac() {
   uint8_t mac_buff[6];
   get_efuse_mac(mac_buff);
@@ -57,6 +62,12 @@ uint64_t get_efuse_mac() {
          ((uint64_t)mac_buff[4] << 32) + ((uint64_t)mac_buff[5] << 40);
 }
 
+/**
+ * @brief Get mac address of wlan0
+ *
+ * @param mac[6] it will be written to this buffer
+ * @return error_t
+ */
 error_t get_efuse_mac(uint8_t *mac) {
   struct ifreq s;
   int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
@@ -69,14 +80,17 @@ error_t get_efuse_mac(uint8_t *mac) {
   return ERROR_FAIL;
 }
 
+// TODO
 Adc::Adc() {}
-
 void Adc::init(adc_input_t channel) {}
-
 uint32_t Adc::read_raw() { return 0; }
-
 uint32_t Adc::calc_voltage(uint32_t adc_reading) { return 0; }
 
+/**
+ * @brief Get the total cpu load
+ *
+ * @return uint16_t cpu load in percent * 100
+ */
 uint16_t get_cpu_load_total() {
   std::ifstream file;
   char buff[1024];
@@ -91,15 +105,25 @@ uint16_t get_cpu_load_total() {
   return (uint16_t)(load * 10000);
 }
 
+/**
+ * @brief Get the cpu load of this process
+ *
+ * @return uint16_t cpu load in percent * 100
+ */
 uint16_t get_cpu_load_this_process() {
   std::string res = exec("ps -C \"main\" -o \%cpu,\%mem");
   float load, mem;
   int n = sscanf(res.c_str(), "%*s %*s %f %f", &load, &mem);
-  return (uint8_t)(load * 10000);
+  return (uint16_t)(load * 100);
 }
 
+/**
+ * @brief Get the cpu temperature
+ *
+ * @return int16_t temperature in C * 100
+ */
 int16_t get_cpu_temp() {
-  int16_t millideg;
+  int32_t millideg;
   char buff[1024];
   std::ifstream file;
   file.open("/sys/class/thermal/thermal_zone0/temp");
@@ -109,7 +133,7 @@ int16_t get_cpu_temp() {
   file.read(buff, sizeof(buff) - 1);
   sscanf(buff, "%d", &millideg);
   file.close();
-  return millideg;
+  return millideg / 10;
 }
 
 #endif

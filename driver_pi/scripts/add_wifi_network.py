@@ -23,9 +23,14 @@ f.close()
 net_exists = False
 current_block = False
 for i in range(0, len(lines)):
+    if i >= len(lines):
+        # since we might have removed lines with pop
+        break
     if 'ssid' in lines[i] and '"{}"'.format(ssid) in lines[i]:
         net_exists = True
         current_block = True
+    if current_block and 'disabled=1' in lines[i]:
+        lines.pop(i)
     if current_block and 'psk' in lines[i]:
         if not '"{}"'.format(pw) in lines[i]:
             parts = lines[i].split('=')
