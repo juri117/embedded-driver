@@ -15,6 +15,7 @@
 #include "def.h"
 
 #if BUILD_TARGET == TARGET_ESP32
+#include "driver_esp32/NeoPixel.hpp"
 #include "driver_esp32/PrefManager.hpp"
 #include "driver_esp32/TcpConnector.hpp"
 #include "driver_esp32/isc.hpp"
@@ -27,6 +28,7 @@
 #include "driver_esp32/time.hpp"
 #include "driver_esp32/uart.hpp"
 #elif BUILD_TARGET == TARGET_PI3
+#include "driver_pi/NeoPixel.hpp"
 #include "driver_pi/PrefManager.hpp"
 #include "driver_pi/TcpConnector.hpp"
 #include "driver_pi/isc.hpp"
