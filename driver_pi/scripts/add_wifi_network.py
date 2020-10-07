@@ -22,6 +22,8 @@ f.close()
 
 net_exists = False
 current_block = False
+edited = False
+
 for i in range(0, len(lines)):
     if i >= len(lines):
         # since we might have removed lines with pop
@@ -29,12 +31,14 @@ for i in range(0, len(lines)):
     if 'ssid' in lines[i] and '"{}"'.format(ssid) in lines[i]:
         net_exists = True
         current_block = True
-    if current_block and 'disabled=1' in lines[i]:
+    if 'disabled=1' in lines[i]:
         lines.pop(i)
+        edited = True
     if current_block and 'psk' in lines[i]:
         if not '"{}"'.format(pw) in lines[i]:
             parts = lines[i].split('=')
             lines[i] = '{}="{}"\n'.format(parts[0], pw)
+            edited = True
     if '}' in lines[i]:
         current_block = False
 
@@ -46,6 +50,9 @@ if not net_exists:
     lines.append('\tpsk="{}"\n'.format(pw))
     lines.append('\tkey_mgmt=WPA-PSK\n')
     lines.append('}\n')
+    edited = True
+
+if edited:
     out_f = open(wifi_config_file, 'w')
     for l in lines:
         out_f.write(l)
