@@ -17,6 +17,7 @@
 #include <esp_timer.h>
 
 #include "../error.hpp"
+#include "log.hpp"
 #include "time.hpp"
 
 typedef gpio_num_t uart_name_t;

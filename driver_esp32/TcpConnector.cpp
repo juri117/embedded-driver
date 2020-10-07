@@ -440,10 +440,10 @@ int TcpConnector::write_bytes(uint8_t* bytes, uint16_t len) {
     //        bytes[USR_CMD_COUNT_BYTE_OFFSET], err,
     //        bytes[USR_CMD_CMD_BYTE_OFFSET]);
     if (err < 0) {
-      printf("TcpConnector: Error occured during sending: errno %s, ret %d",
-             strerror(errno), err);
       this->send_error_counter++;
       if (this->send_error_counter >= SEND_FAIL_MAX_FOR_DISCONNECT) {
+        printf("TcpConnector: Error occured during sending: errno %s, ret %d",
+               strerror(errno), err);
         printf("TcpConnector: hit send fail max, disconnect!");
         this->disconnect_from_server();
         // tcp_connected = false;

@@ -35,14 +35,14 @@ int uart_read(uart_port_t uart_num, uint8_t* buf, uint32_t length,
   int res =
       uart_read_bytes((uart_port_t)uart_num, buf, 1, pdMS_TO_TICKS(timeout_ms));
   if (res <= 0) {
-    return res;
+    return ERROR_FAIL;
   }
   len++;
   while (res > 0 && get_time_system_ms() - start < timeout_ms && len < length) {
     res =
         uart_read_bytes((uart_port_t)uart_num, buf + len, 1, pdMS_TO_TICKS(1));
     if (res > 0) {
-      len += res;
+      len++;
     }
   }
   return len;
