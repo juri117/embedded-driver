@@ -42,6 +42,7 @@
 #define PULSE_TRS	(50000 / (DURATION * DIVIDER));
 #define MAX_PULSES	32
 #define RMTCHANNEL	0
+#define delay_ms(ms) vTaskDelay((ms) / portTICK_RATE_MS)
 
 uint8_t BRIGHTNESS = 25;  /* Set the brightness of the LEDs. Range = 0 - 255 */
 uint16_t PIXEL_COUNT;
@@ -207,7 +208,7 @@ void NeoPixel::set_brightness(uint16_t index, float brightness) {
   BRIGHTNESS = brightness;
 }
 
-void NeiPixel::rainbow() {
+void NeoPixel::rainbow() {
   const uint8_t anim_step = 10;
   const uint8_t anim_max = 250;
   const uint8_t pixel_count = PIXEL_COUNT; // Number of your "pixels"
@@ -216,17 +217,17 @@ void NeiPixel::rainbow() {
   uint8_t step = 0;
   rgbVal color2 = makeRGBVal(anim_max, 0, 0);
   uint8_t step2 = 0;
-  rgbVal *pixels;
+  //rgbVal *pixels;  // TODO: Needed?
 
 
-  pixels = malloc(sizeof(rgbVal) * pixel_count);
+  //pixels = malloc(sizeof(rgbVal) * pixel_count);
 
   while (1) {
     color = color2;
     step = step2;
 
     for (uint8_t i = 0; i < pixel_count; i++) {
-      pixels[i] = color;
+      //pixels[i] = color;
 
       if (i == 1) {
         color2 = color;
