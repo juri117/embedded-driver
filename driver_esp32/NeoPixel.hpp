@@ -30,6 +30,7 @@ typedef union {
 
 class NeoPixel {
  private:
+  void rainbow();
  public:
   NeoPixel();
   void init(gpio_num_t gpio, uint16_t neo_count);

@@ -140,71 +140,75 @@ NeoPixel::NeoPixel() {  // Constructor
 }
 
 void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
-    DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_RMT_CLK_EN);
-    DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_RMT_RST);
+  DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_RMT_CLK_EN);
+  DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_RMT_RST);
 
-    rmt_set_pin((rmt_channel_t)RMTCHANNEL, RMT_MODE_TX, (gpio_num_t)gpio);
+  rmt_set_pin((rmt_channel_t)RMTCHANNEL, RMT_MODE_TX, (gpio_num_t)gpio);
 
-    ws2812_initRMTChannel(RMTCHANNEL);
+  ws2812_initRMTChannel(RMTCHANNEL);
 
-    RMT.tx_lim_ch[RMTCHANNEL].limit = MAX_PULSES;
-    RMT.int_ena.ch0_tx_thr_event = 1;
-    RMT.int_ena.ch0_tx_end = 1;
+  RMT.tx_lim_ch[RMTCHANNEL].limit = MAX_PULSES;
+  RMT.int_ena.ch0_tx_thr_event = 1;
+  RMT.int_ena.ch0_tx_end = 1;
 
-    ws2812_bits[0].level0 = 1;
-    ws2812_bits[0].level1 = 0;
-    ws2812_bits[0].duration0 = PULSE_T0H;
-    ws2812_bits[0].duration1 = PULSE_T0L;
-    ws2812_bits[1].level0 = 1;
-    ws2812_bits[1].level1 = 0;
-    ws2812_bits[1].duration0 = PULSE_T1H;
-    ws2812_bits[1].duration1 = PULSE_T1L;
+  ws2812_bits[0].level0 = 1;
+  ws2812_bits[0].level1 = 0;
+  ws2812_bits[0].duration0 = PULSE_T0H;
+  ws2812_bits[0].duration1 = PULSE_T0L;
+  ws2812_bits[1].level0 = 1;
+  ws2812_bits[1].level1 = 0;
+  ws2812_bits[1].duration0 = PULSE_T1H;
+  ws2812_bits[1].duration1 = PULSE_T1L;
 
-    esp_intr_alloc(ETS_RMT_INTR_SOURCE, 0, ws2812_handleInterrupt, NULL, &rmt_intr_handle);
+  esp_intr_alloc(ETS_RMT_INTR_SOURCE, 0, ws2812_handleInterrupt, NULL, &rmt_intr_handle);
 
-    PIXEL_COUNT = neo_count;  // Assign number of pixels (LEDs) in the array to the global definition
+  PIXEL_COUNT = neo_count;  // Assign number of pixels (LEDs) in the array to the global definition
 
-    return;
+  return;
 }
 
 void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
 
-    unsigned int i;
+  unsigned int i;
 
 
-    ws2812_len = (PIXEL_COUNT * 3) * sizeof(uint8_t);
-    ws2812_buffer = (uint8_t*)malloc(ws2812_len);
+  ws2812_len = (PIXEL_COUNT * 3) * sizeof(uint8_t);
+  ws2812_buffer = (uint8_t*)malloc(ws2812_len);
 
-    for (i = 0; i < PIXEL_COUNT; i++) {
-        ws2812_buffer[0 + i * 3] = (g * BRIGHTNESS) >> 8;
-        ws2812_buffer[1 + i * 3] = (r * BRIGHTNESS) >> 8;
-        ws2812_buffer[2 + i * 3] = (b * BRIGHTNESS) >> 8;
-    }
+  for (i = 0; i < PIXEL_COUNT; i++) {
+      ws2812_buffer[0 + i * 3] = (g * BRIGHTNESS) >> 8;
+      ws2812_buffer[1 + i * 3] = (r * BRIGHTNESS) >> 8;
+      ws2812_buffer[2 + i * 3] = (b * BRIGHTNESS) >> 8;
+  }
 
-    ws2812_pos = 0;
-    ws2812_half = 0;
+  ws2812_pos = 0;
+  ws2812_half = 0;
 
-    ws2812_copy();
+  ws2812_copy();
 
-    if (ws2812_pos < ws2812_len)
-        ws2812_copy();
+  if (ws2812_pos < ws2812_len)
+      ws2812_copy();
 
-    ws2812_sem = xSemaphoreCreateBinary();
+  ws2812_sem = xSemaphoreCreateBinary();
 
-    RMT.conf_ch[RMTCHANNEL].conf1.mem_rd_rst = 1;
-    RMT.conf_ch[RMTCHANNEL].conf1.tx_start = 1;
+  RMT.conf_ch[RMTCHANNEL].conf1.mem_rd_rst = 1;
+  RMT.conf_ch[RMTCHANNEL].conf1.tx_start = 1;
 
-    xSemaphoreTake(ws2812_sem, portMAX_DELAY);
-    vSemaphoreDelete(ws2812_sem);
-    ws2812_sem = NULL;
+  xSemaphoreTake(ws2812_sem, portMAX_DELAY);
+  vSemaphoreDelete(ws2812_sem);
+  ws2812_sem = NULL;
 
-    free(ws2812_buffer);
+  free(ws2812_buffer);
 
-    return;
+  return;
 }
 
 void NeoPixel::set_brightness(uint16_t index, float brightness) {
-    BRIGHTNESS = brightness;
+  BRIGHTNESS = brightness;
+}
+
+void NeiPixel::rainbow() {
+
 }
 
 #endif
