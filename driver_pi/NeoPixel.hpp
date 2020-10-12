@@ -53,6 +53,7 @@ class NeoPixel {
 
   void clearPWMBuffer();
   void* map_peripheral(uint32_t base, uint32_t len);
+  static Color_t RGB2Color(uint8_t r, uint8_t g, uint8_t b);
 
  public:
   NeoPixel();

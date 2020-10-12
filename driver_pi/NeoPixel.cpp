@@ -172,7 +172,19 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     usleep(100);
 }
 
-void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {}
+void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
+    if(pixel < 0) {
+        printf("Unable to set pixel %d (less than zero?)\n", index);
+        return false;
+    }
+    if(pixel > numLEDs - 1) {
+        printf("Unable to set pixel %d (LED buffer is %d pixels long)\n", index, numLEDs);
+        return false;
+    }
+    LEDBuffer[pixel] = RGB2Color(r, g, b);
+    return true;
+}
+
 void NeoPixel::set_brightness(uint16_t index, float brightness) {}
 
 // Private
@@ -192,6 +204,12 @@ void* NeoPixel::map_peripheral(uint32_t base, uint32_t len){
     close(fd);
 
     return vaddr;    
+}
+
+Color_t NeoPixel::RGB2Color(uint8_t r, uint8_t g, uint8_t b){
+    //Color_t color = { r, g, b };
+    Color_t color(r, g, b);
+    return color;
 }
 
 #endif
