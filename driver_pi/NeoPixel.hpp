@@ -51,12 +51,15 @@ class NeoPixel {
   static volatile unsigned int *dma_reg;
   static volatile unsigned int *gpio_reg;
 
+  void clearPWMBuffer();
+  void* map_peripheral(uint32_t base, uint32_t len);
+
  public:
   NeoPixel();
   void init(gpio_num_t gpio, uint16_t neo_count);
   void set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b);
   void set_brightness(uint16_t index, float brightness);
-  
+
 };
 
 // Defines

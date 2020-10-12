@@ -175,4 +175,23 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
 void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {}
 void NeoPixel::set_brightness(uint16_t index, float brightness) {}
 
+// Private
+void NeoPixel::clearPWMBuffer(){
+    memset(PWMWaveform, 0, NUM_DATA_WORDS * 4);
+}
+
+void* NeoPixel::map_peripheral(uint32_t base, uint32_t len){
+    int fd = open("/dev/mem", O_RDWR);
+    void * vaddr;
+
+    if (fd < 0)
+        fatal("Failed to open /dev/mem: %m\n");
+    vaddr = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_SHARED, fd, base);
+    if (vaddr == MAP_FAILED)
+        fatal("Failed to map peripheral at 0x%08x: %m\n", base);
+    close(fd);
+
+    return vaddr;    
+}
+
 #endif
