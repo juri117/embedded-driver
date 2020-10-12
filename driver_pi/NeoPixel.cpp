@@ -9,7 +9,7 @@ NeoPixel::NeoPixel() {}
 
 void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     LEDBuffer.resize(neo_count);  // Set the number of neopixels in the vector
-    brightness=DEFAULT_BRIGHTNESS;  // Set default brightness
+    brightness_global = DEFAULT_BRIGHTNESS;  // Set default brightness_global
     int i = 0;
     int pid;
     int fd;
@@ -185,7 +185,18 @@ void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
     return true;
 }
 
-void NeoPixel::set_brightness(uint16_t index, float brightness) {}
+void NeoPixel::set_brightness(uint16_t index, float brightness) {
+    if(brightness < 0) {
+        printf("Brightness can't be set below 0.\n");
+        return false;
+    }
+    if(brightness > 1) {
+        printf("Brightness can't be set above 1.\n");
+        return false;
+    }
+    brightness_global = brightness;
+    return true;
+}
 
 // Private
 void NeoPixel::clearPWMBuffer(){

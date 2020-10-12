@@ -41,7 +41,7 @@ class NeoPixel {
  private:
   std::vector<Color_t> LEDBuffer;
   unsigned int numLEDs;
-  float brightness;
+  float brightness_global;
   unsigned int PWMWaveform[NUM_DATA_WORDS];
   static struct control_data_s *ctl;
   page_map_t *page_map;
