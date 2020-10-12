@@ -39,11 +39,24 @@
 
 class NeoPixel {
  private:
+  std::vector<Color_t> LEDBuffer;
+  unsigned int numLEDs;
+  float brightness;
+  unsigned int PWMWaveform[NUM_DATA_WORDS];
+  static struct control_data_s *ctl;
+  page_map_t *page_map;
+  static uint8_t *virtbase;
+  static volatile unsigned int *pwm_reg;
+  static volatile unsigned int *clk_reg;
+  static volatile unsigned int *dma_reg;
+  static volatile unsigned int *gpio_reg;
+
  public:
   NeoPixel();
   void init(gpio_num_t gpio, uint16_t neo_count);
   void set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b);
   void set_brightness(uint16_t index, float brightness);
+  
 };
 
 // Defines
