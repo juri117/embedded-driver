@@ -3,7 +3,7 @@
 
 #if BUILD_TARGET == TARGET_PI3
 
-// static const char* TAG = "neoPixel";
+static const char* TAG = "neoPixel";
 
 NeoPixel::NeoPixel() {}
 
@@ -42,28 +42,28 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
         0);
 
     if (virtbase == MAP_FAILED) {
-        fatal("Failed to mmap physical pages: %m\n");
+        log_e(TAG, "Failed to mmap physical pages: %m\n");
     }
 
     if ((unsigned long)virtbase & (PAGE_SIZE-1)) {
-        fatal("Virtual address is not page aligned\n");
+        log_e(TAG, "Virtual address is not page aligned\n");
     }
 
     // Allocate page map (pointers to the control block(s) and data for each CB
     page_map =(page_map_t*) malloc(NUM_PAGES * sizeof(*page_map));
     if (page_map == 0)
-        fatal("Failed to malloc page_map: %m\n");
+        log_e(TAG, "Failed to malloc page_map: %m\n");
 
     pid = getpid();
     sprintf(pagemap_fn, "/proc/%d/pagemap", pid);
     fd = open(pagemap_fn, O_RDONLY);
 
     if (fd < 0) {
-        fatal("Failed to open %s: %m\n", pagemap_fn);
+        log_e(TAG, "Failed to open %s: %m\n", pagemap_fn);
     }
 
     if (lseek(fd, (unsigned long)virtbase >> 9, SEEK_SET) != (unsigned long)virtbase >> 9) {
-        fatal("Failed to seek on %s: %m\n", pagemap_fn);
+        log_e(TAG, "Failed to seek on %s: %m\n", pagemap_fn);
     }
 
     for (i = 0; i < NUM_PAGES; i++) {
@@ -73,11 +73,11 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
         page_map[i].virtaddr[0] = 0;
 
         if (read(fd, &pfn, sizeof(pfn)) != sizeof(pfn)) {
-            fatal("Failed to read %s: %m\n", pagemap_fn);
+            log_e(TAG, "Failed to read %s: %m\n", pagemap_fn);
         }
 
         if ((pfn >> 55)&0xfbf != 0x10c) {
-            fatal("Page %d not present (pfn 0x%016llx)\n", i, pfn);
+            log_e(TAG, "Page %d not present (pfn 0x%016llx)\n", i, pfn);
         }
 
         page_map[i].physaddr = (unsigned int)pfn << PAGE_SHIFT | 0x40000000;
@@ -173,29 +173,29 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
 }
 
 void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
-    if(pixel < 0) {
+    if(index < 0) {
         printf("Unable to set pixel %d (less than zero?)\n", index);
-        return false;
+        //return false;
     }
-    if(pixel > numLEDs - 1) {
+    if(index > numLEDs - 1) {
         printf("Unable to set pixel %d (LED buffer is %d pixels long)\n", index, numLEDs);
-        return false;
+        //return false;
     }
-    LEDBuffer[pixel] = RGB2Color(r, g, b);
-    return true;
+    LEDBuffer[index] = RGB2Color(r, g, b);
+    //return true;
 }
 
 void NeoPixel::set_brightness(uint16_t index, float brightness) {
     if(brightness < 0) {
         printf("Brightness can't be set below 0.\n");
-        return false;
+        //return false;
     }
     if(brightness > 1) {
         printf("Brightness can't be set above 1.\n");
-        return false;
+        //return false;
     }
     brightness_global = brightness;
-    return true;
+    //return true;
 }
 
 // Private
@@ -208,13 +208,18 @@ void* NeoPixel::map_peripheral(uint32_t base, uint32_t len){
     void * vaddr;
 
     if (fd < 0)
-        fatal("Failed to open /dev/mem: %m\n");
+        log_e(TAG, "Failed to open /dev/mem: %m\n");
     vaddr = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_SHARED, fd, base);
     if (vaddr == MAP_FAILED)
-        fatal("Failed to map peripheral at 0x%08x: %m\n", base);
+        log_e(TAG, "Failed to map peripheral at 0x%08x: %m\n", base);
     close(fd);
 
     return vaddr;    
+}
+
+unsigned int NeoPixel::mem_virt_to_phys(void *virt){
+    unsigned int offset = (uint8_t *)virt - virtbase;
+    return page_map[offset >> PAGE_SHIFT].physaddr + (offset % PAGE_SIZE);    
 }
 
 Color_t NeoPixel::RGB2Color(uint8_t r, uint8_t g, uint8_t b){

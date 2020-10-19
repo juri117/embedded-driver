@@ -9,6 +9,7 @@
  *
  */
 
+
 #ifndef DRIVER_DRIVER_PI3_NEOPIXEL_H
 #define DRIVER_DRIVER_PI3_NEOPIXEL_H
 
@@ -33,9 +34,39 @@
 #include <time.h>
 #include <signal.h>
 
+#include <vector>
+
 #include "../error.hpp"
 #include "log.hpp"
 #include "types.hpp"
+
+#define NUM_DATA_WORDS 1016
+
+//typedef struct {
+struct Color_t {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+
+    Color_t(unsigned char r=0, unsigned char g=0, unsigned char b=0)
+	: r(r), g(g), b(b)
+    {}
+
+    bool operator==(const Color_t& other) const {
+        return (r==other.r && g==other.g && b==other.b);
+    }
+
+    bool operator!=(const Color_t& other) const {
+        return (r!=other.r && g!=other.g && b!=other.b);
+    }
+
+//} Color_t;
+};
+
+typedef struct {
+    uint8_t *virtaddr;
+    uint32_t physaddr;
+} page_map_t;
 
 class NeoPixel {
  private:
@@ -53,6 +84,7 @@ class NeoPixel {
 
   void clearPWMBuffer();
   void* map_peripheral(uint32_t base, uint32_t len);
+  unsigned int mem_virt_to_phys(void *virt);
   static Color_t RGB2Color(uint8_t r, uint8_t g, uint8_t b);
 
  public:
@@ -224,12 +256,6 @@ typedef struct {
         pad[2];
 } dma_cb_t;
 
-typedef struct {
-    uint8_t *virtaddr;
-    uint32_t physaddr;
-} page_map_t;
-
-#define NUM_DATA_WORDS 1016
 struct control_data_s {
     dma_cb_t cb[1];
     uint32_t sample[NUM_DATA_WORDS];
@@ -251,27 +277,6 @@ struct control_data_s {
 #define SET_GPIO_ALT(g,a) *(gpio_reg+(((g)/10))) |= (((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
 #define GPIO_SET *(gpio_reg+7)
 #define GPIO_CLR *(gpio_reg+10)
-
-//typedef struct {
-struct Color_t {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-
-    Color_t(unsigned char r=0, unsigned char g=0, unsigned char b=0)
-	: r(r), g(g), b(b)
-    {}
-
-    bool operator==(const Color_t& other) const {
-        return (r==other.r && g==other.g && b==other.b);
-    }
-
-    bool operator!=(const Color_t& other) const {
-        return (r!=other.r && g!=other.g && b!=other.b);
-    }
-
-//} Color_t;
-};
 
 #define DEFAULT_BRIGHTNESS 1.0
 
