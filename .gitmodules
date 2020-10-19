@@ -1,6 +1,3 @@
 [submodule "libs/rapidjson"]
 	path = libs/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
-[submodule "libs/hash-library"]
-	path = libs/hash-library
-	url = https://github.com/stbrumme/hash-library.git
