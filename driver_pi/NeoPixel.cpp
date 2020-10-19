@@ -7,6 +7,8 @@ static const char* TAG = "neoPixel";
 
 NeoPixel::NeoPixel() {}
 
+uint8_t* NeoPixel::virtbase=0;
+
 void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     LEDBuffer.resize(neo_count);  // Set the number of neopixels in the vector
     brightness_global = DEFAULT_BRIGHTNESS;  // Set default brightness_global
@@ -84,7 +86,7 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     }
 
     // Set up control block
-    ctl = (struct control_data_s *)virtbase;
+    ctl = (control_data_s *)virtbase;
     dma_cb_t *cbp = ctl->cb;
     unsigned int phys_pwm_fifo_addr = 0x7e20c000 + 0x18;
 

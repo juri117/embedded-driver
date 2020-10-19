@@ -64,9 +64,25 @@ struct Color_t {
 };
 
 typedef struct {
+    unsigned int
+        info,
+        src,
+        dst,
+        length,
+        stride,
+        next,
+        pad[2];
+} dma_cb_t;
+
+typedef struct {
     uint8_t *virtaddr;
     uint32_t physaddr;
 } page_map_t;
+
+typedef struct {
+    dma_cb_t cb[1];
+    uint32_t sample[NUM_DATA_WORDS];
+} control_data_s;
 
 class NeoPixel {
  private:
@@ -74,13 +90,13 @@ class NeoPixel {
   unsigned int numLEDs;
   float brightness_global;
   unsigned int PWMWaveform[NUM_DATA_WORDS];
-  static struct control_data_s *ctl;
+  control_data_s *ctl;
   page_map_t *page_map;
   static uint8_t *virtbase;
-  static volatile unsigned int *pwm_reg;
-  static volatile unsigned int *clk_reg;
-  static volatile unsigned int *dma_reg;
-  static volatile unsigned int *gpio_reg;
+  volatile unsigned int *pwm_reg;
+  volatile unsigned int *clk_reg;
+  volatile unsigned int *dma_reg;
+  volatile unsigned int *gpio_reg;
 
   void clearPWMBuffer();
   void* map_peripheral(uint32_t base, uint32_t len);
@@ -245,25 +261,9 @@ class NeoPixel {
 #define DMA_DEBUG_FIFO_ERROR            1
 #define DMA_DEBUG_READ_LAST_NOT_SET     0
 
-typedef struct {
-    unsigned int
-        info,
-        src,
-        dst,
-        length,
-        stride,
-        next,
-        pad[2];
-} dma_cb_t;
-
-struct control_data_s {
-    dma_cb_t cb[1];
-    uint32_t sample[NUM_DATA_WORDS];
-};
-
 #define PAGE_SIZE   4096
 #define PAGE_SHIFT  12
-#define NUM_PAGES   ((sizeof(struct control_data_s) + PAGE_SIZE - 1) >> PAGE_SHIFT)
+#define NUM_PAGES   ((sizeof(control_data_s) + PAGE_SIZE - 1) >> PAGE_SHIFT)
 
 #define SETBIT(word, bit) word |= 1<<bit
 #define CLRBIT(word, bit) word &= ~(1<<bit)
