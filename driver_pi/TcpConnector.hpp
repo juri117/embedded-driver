@@ -28,6 +28,7 @@
 #include "utils.hpp"
 
 #define WIFI_SOCK_MODE_OFF 0x00
+#define WIFI_SOCK_MODE_SURF_STICK 0x01
 // #define WIFI_SOCK_MODE_STA 0x01     // wifi client, tcp server
 // #define WIFI_SOCK_MODE_AP 0x02      // wifi AP, tcp server
 #define WIFI_SOCK_MODE_STA_CL 0x03  // wifi client, tcp client

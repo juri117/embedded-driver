@@ -46,6 +46,9 @@ TcpConnector::TcpConnector()
 void TcpConnector::init(uint8_t mode, const uint8_t* ssid, const uint8_t* pw) {
   this->mode = mode;
   switch (this->mode) {
+    case WIFI_SOCK_MODE_SURF_STICK:
+      this->disable_wifi();
+      break;
     case WIFI_SOCK_MODE_STA_CL:
       this->enable_wifi();
       this->init_as_sta(ssid, pw);
