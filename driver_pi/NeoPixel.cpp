@@ -28,8 +28,8 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     gpio_reg = (unsigned int*)map_peripheral(GPIO_BASE, GPIO_LEN);
 
 
-    // Set PWM alternate function for GPIO18  TODO: Set for chosen GPIO
-    SET_GPIO_ALT(18, 5);
+    // Set PWM alternate function for chosen GPIO
+    SET_GPIO_ALT(gpio, 5);
 
     // Allocate memory for the DMA control block & data to be sent
     virtbase = (uint8_t*) mmap(
@@ -174,6 +174,73 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     usleep(100);
 }
 
+void NeoPixel::startTransfer() {
+    dma_reg[DMA_CONBLK_AD] = mem_virt_to_phys(ctl->cb);
+    dma_reg[DMA_CS] = DMA_CS_CONFIGWORD | (1 << DMA_CS_ACTIVE);
+    usleep(100);
+
+    SETBIT(pwm_reg[PWM_CTL], PWM_CTL_PWEN1);
+}
+
+void NeoPixel::setPWMBit(unsigned int bitPos, unsigned char bit) {
+    unsigned int wordOffset = (int)(bitPos / 32);
+    unsigned int bitIdx = bitPos - (wordOffset * 32);
+
+    switch(bit) {
+        case 1:
+            PWMWaveform[wordOffset] |= (1 << (31 - bitIdx));
+            break;
+        case 0:
+            PWMWaveform[wordOffset] &= ~(1 << (31 - bitIdx));
+            break;
+    }
+}
+
+void NeoPixel::show() {
+    int i, j;
+    unsigned int LEDBuffeWordPos = 0;
+    unsigned int PWMWaveformBitPos = 0;
+    unsigned int colorBits = 0;
+    unsigned char colorBit = 0;
+    unsigned int wireBit = 0;
+    Color_t color;
+
+    for(i=0; i<numLEDs; i++) {
+        LEDBuffer[i].r *= brightness_global;
+        LEDBuffer[i].g *= brightness_global;
+        LEDBuffer[i].b *= brightness_global;
+        colorBits = ((unsigned int)LEDBuffer[i].r << 8) | ((unsigned int)LEDBuffer[i].g << 16) | LEDBuffer[i].b;
+
+        for(j=23; j>=0; j--) {
+            colorBit = (colorBits & (1 << j)) ? 1 : 0;
+            switch(colorBit) {
+                case 1:
+                    setPWMBit(wireBit++, 1);
+                    setPWMBit(wireBit++, 1);
+                    setPWMBit(wireBit++, 0);
+                    break;
+                case 0:
+                    setPWMBit(wireBit++, 1);
+                    setPWMBit(wireBit++, 0);
+                    setPWMBit(wireBit++, 0);
+                    break;
+            }
+        }
+    }
+
+    ctl = (control_data_s *)virtbase;
+    dma_cb_t *cbp = ctl->cb;
+
+    for(i = 0; i < (cbp->length / 4); i++) {
+        ctl->sample[i] = PWMWaveform[i];
+    }
+
+    startTransfer();
+
+    float bitTimeUSec = (float)(NUM_DATA_WORDS * 32) * 0.4;
+    usleep((int)bitTimeUSec);
+}
+
 void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
     if(index < 0) {
         printf("Unable to set pixel %d (less than zero?)\n", index);
@@ -184,6 +251,7 @@ void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
         //return false;
     }
     LEDBuffer[index] = RGB2Color(r, g, b);
+    show();
     //return true;
 }
 

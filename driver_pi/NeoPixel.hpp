@@ -102,6 +102,9 @@ class NeoPixel {
   void* map_peripheral(uint32_t base, uint32_t len);
   unsigned int mem_virt_to_phys(void *virt);
   static Color_t RGB2Color(uint8_t r, uint8_t g, uint8_t b);
+  void startTransfer();
+  void setPWMBit(unsigned int bitPos, unsigned char bit);
+  void show();
 
  public:
   NeoPixel();
