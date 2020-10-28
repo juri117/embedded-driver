@@ -28,7 +28,7 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
     gpio_reg = (unsigned int*)map_peripheral(GPIO_BASE, GPIO_LEN);
 
 
-    // Set PWM alternate function for GPIO18
+    // Set PWM alternate function for GPIO18  TODO: Set for chosen GPIO
     SET_GPIO_ALT(18, 5);
 
     // Allocate memory for the DMA control block & data to be sent
