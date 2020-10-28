@@ -176,11 +176,17 @@ void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
   ws2812_len = (PIXEL_COUNT * 3) * sizeof(uint8_t);
   ws2812_buffer = (uint8_t*)malloc(ws2812_len);
 
+/*
   for (i = 0; i < PIXEL_COUNT; i++) {
       ws2812_buffer[0 + i * 3] = (g * BRIGHTNESS) >> 8;
       ws2812_buffer[1 + i * 3] = (r * BRIGHTNESS) >> 8;
       ws2812_buffer[2 + i * 3] = (b * BRIGHTNESS) >> 8;
-  }
+  }*/
+
+
+  ws2812_buffer[0 + (index - 1) * 3] = (g * BRIGHTNESS) >> 8;
+  ws2812_buffer[1 + (index - 1) * 3] = (r * BRIGHTNESS) >> 8;
+  ws2812_buffer[2 + (index - 1) * 3] = (b * BRIGHTNESS) >> 8;
 
   ws2812_pos = 0;
   ws2812_half = 0;
