@@ -9,13 +9,26 @@ static const char *TAG = "pi_utils";
 std::string exec(const char *cmd) {
   std::array<char, 128> buffer;
   std::string result;
-  std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+  // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+  FILE *pipe = popen(cmd, "r");
   if (!pipe) throw std::runtime_error("popen() failed!");
-  while (!feof(pipe.get())) {
-    if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
-      result += buffer.data();
+  while (!feof(pipe)) {
+    if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
   }
+  int return_code = WEXITSTATUS(pclose(pipe));
   return result;
+}
+
+int exec_ret_code(const char *cmd) {
+  std::array<char, 128> buffer;
+  std::string result;
+  // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+  FILE *pipe = popen(cmd, "r");
+  if (!pipe) throw std::runtime_error("popen() failed!");
+  while (!feof(pipe)) {
+    if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
+  }
+  return WEXITSTATUS(pclose(pipe));
 }
 
 bool file_exists(const uint8_t *name) {

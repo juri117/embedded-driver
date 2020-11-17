@@ -3,13 +3,13 @@ import sys
 
 if len(sys.argv) != 3:
     print('wrong number of parameter, requires ssid and pw as strings')
-    sys.exit(-7)
+    sys.exit(1)
 if not isinstance(sys.argv[1], str):
     print('parameter 1: ssid needs to be from type string')
-    sys.exit(-4)
+    sys.exit(2)
 if not isinstance(sys.argv[2], str):
     print('parameter 2: pw needs to be from type string')
-    sys.exit(-5)
+    sys.exit(3)
 
 ssid = sys.argv[1]
 pw = sys.argv[2]
@@ -59,4 +59,4 @@ if edited:
     out_f.close()
 
 print('ok')
-sys.exit(0)
+exit(0)

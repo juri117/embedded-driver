@@ -27,6 +27,7 @@
 std::string exec(const char *cmd);
 
 bool file_exists(const uint8_t *name);
+int exec_ret_code(const char *cmd);
 
 bool find_script(const char *script_name, uint8_t *script_path,
                  uint16_t max_len);

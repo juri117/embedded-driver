@@ -102,10 +102,10 @@ void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
   }
   uint8_t cmd_buff[PATH_MAX];
   memset(cmd_buff, 0x00, PATH_MAX);
-  sprintf((char*)cmd_buff, "sudo python %s \"%s\" \"%s\"", script_path, ssid,
-          pw);
-  std::string res = exec((const char*)cmd_buff);
-  log_i(TAG, "add wifi ssid + pw: %s", res.c_str());
+  sprintf((char*)cmd_buff, "sudo python3 \"%s\" \"%s\" \"%s\"", script_path,
+          ssid, pw);
+  int res = exec_ret_code((const char*)cmd_buff);
+  log_i(TAG, "add wifi ssid + pw: %d", res);
 }
 
 void TcpConnector::init_as_ap(const uint8_t* ssid, const uint8_t* pw) {}
