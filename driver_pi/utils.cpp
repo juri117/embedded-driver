@@ -35,7 +35,8 @@ bool find_script(const char *script_name, uint8_t *script_path,
     return true;
   }
   memset(script_path, 0x00, max_len);
-  sprintf((char *)script_path, "%s/scripts/%s", current_path, script_path);
+  sprintf((char *)script_path, "%s/build/scripts/%s", current_path,
+          script_name);
   if (file_exists(script_path)) {
     return true;
   }
