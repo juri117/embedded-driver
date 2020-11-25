@@ -21,7 +21,7 @@
 #include <soc/dport_reg.h>
 #include <driver/gpio.h>
 #include <soc/gpio_sig_map.h>
-#include <esp_intr.h>
+#include <esp_intr_alloc.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -170,7 +170,7 @@ void NeoPixel::init(gpio_num_t gpio, uint16_t neo_count) {
 
 void NeoPixel::set_color(uint16_t index, uint8_t r, uint8_t g, uint8_t b) {
 
-  unsigned int i;
+  //unsigned int i;
 
 
   ws2812_len = (PIXEL_COUNT * 3) * sizeof(uint8_t);
