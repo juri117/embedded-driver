@@ -31,27 +31,31 @@ int isc_fd[ISC_ADDRESS_COUNT];
  * @param port
  */
 void isc_scan(i2c_port_t port) {
-  log_d(TAG, "Scanning I2C bus.");
+  log_d(TAG, "Scanning I2C bus, port: %d", port);
 
   uint8_t address;
   error_t result;
-  // printf("     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\n");
-  // printf("00:         ");
-  for (address = 3; address < 0x78; address++) {
-    result = isc_probe(port, address);
-
-    // if (address % 16 == 0) {
-    //   printf("\n%.2x:", address);
-    // }
-    if (result == ERROR_OK) {
-      // printf(" %.2x", address);
-      log_i(TAG, "i2c device found, address: %.2x", address);
-    }
-    //  else {
-    //   printf(" --");
-    // }
+  printf("     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\n");
+  printf("00:         ");
+  char *filename = (char *)"/dev/i2c-1";
+  int i2c_port = 3;
+  if ((i2c_port = open(filename, O_RDWR)) < 0) {
+    return;
   }
-  // printf("\n");
+  for (address = 3; address < 0x78; address++) {
+    result = isc_probe(i2c_port, address);
+
+    if (address % 16 == 0) {
+      printf("\n%.2x:", address);
+    }
+    if (result == ERROR_OK) {
+      printf(" %.2x", address);
+      // log_i(TAG, "i2c device found, address: %.2x", address);
+    } else {
+      printf(" --");
+    }
+  }
+  printf("\n");
 }
 
 /**
@@ -61,7 +65,30 @@ void isc_scan(i2c_port_t port) {
  * @param address
  * @return error_t
  */
-error_t isc_probe(i2c_port_t port, uint8_t address) { return -1; }
+error_t isc_probe(i2c_port_t port, uint8_t address) {
+  int res;
+  if (ioctl(port, I2C_SLAVE, address) < 0) {
+    if (errno == EBUSY) {
+      printf("UU ");
+      return ERROR_FAIL;
+    } else {
+      fprintf(stderr,
+              "Error: Could not set "
+              "address to 0x%02x: %s\n",
+              address, strerror(errno));
+      return ERROR_FAIL;
+    }
+  }
+  if ((address >= 0x30 && address <= 0x37) ||
+      (address >= 0x50 && address <= 0x5F))
+    res = i2c_smbus_read_byte(port);
+  else
+    res = i2c_smbus_write_quick(port, I2C_SMBUS_WRITE);
+  if (res < 0) {
+    return ERROR_FAIL;
+  }
+  return ERROR_OK;
+}
 
 /**
  * @brief this function reads bytes from a slave
@@ -119,6 +146,26 @@ error_t isc_master_read_register(i2c_port_t i2c_num, uint16_t address,
   return ERROR_OK;
 }
 
+error_t isc_master_read_register16(i2c_port_t i2c_num, uint16_t address,
+                                   uint16_t regAdd, uint8_t *readBuff,
+                                   uint16_t readBuffLen) {
+  if (isc_fd[address] < 0) {
+    if (!isc_master_connect_device(address)) {
+      return ERROR_FAIL;
+    }
+  }
+  uint16_t result;
+  char buffer1[2] = {0};
+  buffer1[0] = regAdd >> 8;
+  buffer1[1] = regAdd & 0x00FF;
+  int length1 = 2;  //<<< Number of bytes to write
+  write(isc_fd[address], buffer1, length1);
+  if (read(isc_fd[address], readBuff, readBuffLen) == readBuffLen) {
+    return ERROR_OK;
+  }
+  return ERROR_FAIL;
+}
+
 /**
  * @brief writes to slave
  *
@@ -135,11 +182,16 @@ int isc_master_write(i2c_port_t i2c_num, uint16_t address, uint8_t *buff,
       return ERROR_FAIL;
     }
   }
-  for (uint16_t i = 0; i < len; i++) {
-    if (wiringPiI2CWrite(isc_fd[address], buff[i]) < 0) {
-      return ERROR_FAIL;
+  write(isc_fd[address], buff, len);
+
+  // old write function using wiringPi
+  /*
+    for (uint16_t i = 0; i < len; i++) {
+      if (wiringPiI2CWrite(isc_fd[address], buff[i]) < 0) {
+        return ERROR_FAIL;
+      }
     }
-  }
+    */
   return ERROR_OK;
 }
 
@@ -168,6 +220,36 @@ int isc_master_write_register(i2c_port_t i2c_num, uint16_t address,
     }
   }
   return ERROR_OK;
+}
+
+int isc_master_write_register16(i2c_port_t i2c_num, uint16_t address,
+                                uint16_t regAdd, uint8_t *writeBuff,
+                                uint16_t writeBuffLen) {
+  if (isc_fd[address] < 0) {
+    if (!isc_master_connect_device(address)) {
+      return ERROR_FAIL;
+    }
+  }
+  uint8_t buffer[2 + writeBuffLen] = {0};
+  buffer[0] = regAdd >> 8;
+  buffer[1] = regAdd & 0x00FF;
+  memcpy(buffer + 2, writeBuff, writeBuffLen);
+  // buffer[2] = regAdd >> 8;
+  // buffer[3] = regAdd & 0x00FF;
+  uint16_t length = 2 + writeBuffLen;
+  if (write(isc_fd[address], buffer, length) != length) {
+    return ERROR_OK;
+  }
+  return ERROR_FAIL;
+
+  /*
+    for (uint16_t i = 0; i < writeBuffLen; i++) {
+      int ret = wiringPiI2CWriteReg16(isc_fd[address], regAdd + i,
+    writeBuff[i]); if (ret < 0) { return ERROR_FAIL;
+      }
+    }
+    return ERROR_OK;
+  */
 }
 
 /**

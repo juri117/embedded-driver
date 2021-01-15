@@ -12,13 +12,26 @@
 #ifndef DRIVER_DRIVER_PI3_ISC_H
 #define DRIVER_DRIVER_PI3_ISC_H
 
+// sudo apt-get install libi2c-dev
+
+extern "C" {
+#include <i2c/smbus.h>
+#include <linux/i2c-dev.h>
+}
+#include <fcntl.h>
+#include <linux/i2c-dev.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include <wiringPiI2C.h>
+
+#include <iostream>
 
 #include "../error.hpp"
 #include "log.hpp"
+#include "task.hpp"
 #include "types.hpp"
 
 #define I2C_NUM_0 0
@@ -38,6 +51,9 @@ error_t isc_master_read_bytes(i2c_port_t i2c_num, uint16_t slave_address,
 error_t isc_master_read_register(i2c_port_t i2c_num, uint16_t address,
                                  uint8_t regAdd, uint8_t *readBuff,
                                  uint16_t readBuffLen);
+error_t isc_master_read_register16(i2c_port_t i2c_num, uint16_t address,
+                                   uint16_t regAdd, uint8_t *readBuff,
+                                   uint16_t readBuffLen);
 
 int isc_master_write(i2c_port_t i2c_num, uint16_t address, uint8_t *buff,
                      uint16_t len);
@@ -49,5 +65,9 @@ error_t isc_master_init(i2c_port_t port, gpio_num_t sda, gpio_num_t scl);
 error_t isc_reset_tx(i2c_port_t port);
 
 error_t isc_master_connect_device(uint16_t address);
+
+int isc_master_write_register16(i2c_port_t i2c_num, uint16_t address,
+                                uint16_t regAdd, uint8_t *writeBuff,
+                                uint16_t writeBuffLen);
 
 #endif /* DRIVER_DRIVER_PI3_ISC_H */
