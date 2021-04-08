@@ -14,6 +14,10 @@ if not isinstance(sys.argv[2], str):
 ssid = sys.argv[1]
 pw = sys.argv[2]
 
+if len(ssid) == 0:
+    print('ssid must not be an emptry string')
+    sys.exit(4)
+
 wifi_config_file = "/etc/wpa_supplicant/wpa_supplicant.conf"
 
 f = open(wifi_config_file, "r")
