@@ -16,12 +16,40 @@ PrefManager::~PrefManager() {}
 
 void PrefManager::init() {
   if (this->storage_exists()) {
-    FILE *fp = fopen("config.json", "r");  // non-Windows use "r"
-    char readBuffer[65536];
-    FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-    this->doc.ParseStream(is);
-    fclose(fp);
-    return;
+    FILE *fpSchema = fopen("config_schema.json", "r");
+    char schemaReadBuffer[65536];
+    FileReadStream schemaJson(fpSchema, schemaReadBuffer,
+                              sizeof(schemaReadBuffer));
+    // Document schemaDoc;
+    // schemaDoc.ParseStream(schemaIs);
+
+    Document sd;
+    if (!sd.ParseStream(schemaJson).HasParseError()) {
+      SchemaDocument schema(sd);  // Compile a Document to SchemaDocument
+                                  // parse json config
+      FILE *fp = fopen("config.json", "r");  // non-Windows use "r"
+      char readBuffer[65536];
+      FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+      if (!this->doc.ParseStream(is).HasParseError()) {
+        SchemaValidator validator(schema);
+        if (!this->doc.Accept(validator)) {
+          // Input JSON is invalid according to the schema
+          // Output diagnostic information
+          StringBuffer sb;
+          validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);
+          printf("Invalid schema: %s\n", sb.GetString());
+          printf("Invalid keyword: %s\n", validator.GetInvalidSchemaKeyword());
+          sb.Clear();
+          validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);
+          printf("Invalid document: %s\n", sb.GetString());
+        }
+        return;
+      }
+      fclose(fp);
+      log_e(TAG, "could not parse config.json");
+    }
+    fclose(fpSchema);
+    log_e(TAG, "could not parse config_schema.json");
   }
   log_e(TAG, "could not find config.json");
   // const char json[] = "{}";
