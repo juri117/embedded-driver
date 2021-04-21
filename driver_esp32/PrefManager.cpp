@@ -18,7 +18,7 @@ void PrefManager::init() {
   error_t err;
   err = nvs_open("settings", NVS_READWRITE, &this->nvs);
   if (err != ERROR_OK) {
-    log_e(TAG, "Error (%x) opening NVS handle!", err);
+    log_e(TAG, "Error (0x%x) opening NVS handle!", err);
   }
   // else {
   //   log_i(TAG, "Pref opened!");
@@ -30,7 +30,7 @@ bool PrefManager::storage_exists() { return true; }
 void PrefManager::commit() {
   error_t err = nvs_commit(this->nvs);
   if (err != ERROR_OK) {
-    log_e(TAG, "could not commit to nvs: %x", err);
+    log_e(TAG, "could not commit to nvs: 0x%x", err);
   }
 }
 
@@ -45,7 +45,7 @@ uint8_t PrefManager::read_u8(const char* key, uint8_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -60,7 +60,7 @@ void PrefManager::write_u8(const char* key, uint8_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -75,7 +75,7 @@ uint16_t PrefManager::read_u16(const char* key, uint16_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -90,7 +90,7 @@ void PrefManager::write_u16(const char* key, uint16_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -105,7 +105,7 @@ int16_t PrefManager::read_i16(const char* key, int16_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -120,7 +120,7 @@ void PrefManager::write_i16(const char* key, int16_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -135,7 +135,7 @@ uint32_t PrefManager::read_u32(const char* key, uint32_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -150,7 +150,7 @@ void PrefManager::write_u32(const char* key, uint32_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -165,7 +165,7 @@ int32_t PrefManager::read_i32(const char* key, int32_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %d", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -180,7 +180,7 @@ void PrefManager::write_i32(const char* key, int32_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %d", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -195,7 +195,7 @@ uint64_t PrefManager::read_u64(const char* key, uint64_t def) {
       log_i(TAG, "Pref not initialized yet, set default: %s = %llu", key, def);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -210,7 +210,7 @@ void PrefManager::write_u64(const char* key, uint64_t val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %llu", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -236,7 +236,7 @@ double PrefManager::read_double(const char* key, double def) {
       log_i(TAG, "read blob but buff is to short %s, len = %d", key, len);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -256,7 +256,7 @@ void PrefManager::write_double(const char* key, double val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %f", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -282,7 +282,7 @@ float PrefManager::read_float(const char* key, float def) {
       log_i(TAG, "read blob but buff is to short %s, len = %d", key, len);
       break;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
   }
   return val;
 }
@@ -302,7 +302,7 @@ void PrefManager::write_float(const char* key, float val) {
       log_i(TAG, "Pref not initialized yet, set: %s = %f", key, val);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 
@@ -335,7 +335,7 @@ uint16_t PrefManager::read_ary(const char* key, uint8_t* ary,
       log_i(TAG, "read blob but buff is to short %s, len = %d", key, len);
       return 0;
     default:
-      log_e(TAG, "Error reading pref %s: (%x)", key, err);
+      log_e(TAG, "Error reading pref %s: (0x%x)", key, err);
       return 0;
   }
   return len;
@@ -352,7 +352,7 @@ void PrefManager::write_ary(const char* key, uint8_t* ary, uint16_t len) {
       log_i(TAG, "Pref not initialized yet, set: %s", key);
       break;
     default:
-      log_e(TAG, "Error writing pref %s: (%x)", key, err);
+      log_e(TAG, "Error writing pref %s: (0x%x)", key, err);
   }
 }
 

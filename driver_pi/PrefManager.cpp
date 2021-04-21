@@ -16,7 +16,7 @@ PrefManager::~PrefManager() {}
 
 void PrefManager::init() {
   if (this->storage_exists()) {
-    FILE *fpSchema = fopen("config_schema.json", "r");
+    FILE *fpSchema = fopen("json_schema/config.json", "r");
     char schemaReadBuffer[65536];
     FileReadStream schemaJson(fpSchema, schemaReadBuffer,
                               sizeof(schemaReadBuffer));
