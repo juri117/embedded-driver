@@ -4,17 +4,6 @@
 
 #if BUILD_TARGET == TARGET_ESP32
 
-// #define TIMER_INTR_SEL TIMER_INTR_LEVEL /*!< Timer level interrupt */
-// #define TIMER_GROUP TIMER_GROUP_0       /*!< Test on timer group 0 */
-// #define TIMER_DIVIDER
-//   80 /*!< Hardware timer clock divider, 80 to get 1MHz clock to timer */
-// #define TIMER_SCALE
-//   (TIMER_BASE_CLK / TIMER_DIVIDER) /*!< used to calculate counter value */
-// #define TIMER_FINE_ADJ
-//   (0 * (TIMER_BASE_CLK / TIMER_DIVIDER) /
-//    1000000)                       /*!< used to compensate alarm value */
-// #define TIMER_INTERVAL0_SEC (1.0) /*!< test interval for timer 0 */
-
 void init_gpio_isr_service() { gpio_install_isr_service(0); }
 error_t register_gpio_interrupt(gpio_num_t gpio_num, gpio_isr_t isr_handler,
                                 void* args) {
@@ -97,5 +86,6 @@ uint32_t Adc::calc_voltage(uint32_t adc_reading) {
 uint16_t get_cpu_load_total() { return 0; }
 uint16_t get_cpu_load_this_process() { return 0; }
 int16_t get_cpu_temp() { return 0; }
+uint32_t get_system_error_code() { return0; }
 
 #endif

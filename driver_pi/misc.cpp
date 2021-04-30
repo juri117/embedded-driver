@@ -136,4 +136,17 @@ int16_t get_cpu_temp() {
   return millideg / 10;
 }
 
+/**
+ * @brief Get the system error code by calling vcgencmd get_throttled
+ * https://github.com/raspberrypi/documentation/blob/master/raspbian/applications/vcgencmd.md
+ *
+ * @return uint32_t error code
+ */
+uint32_t get_system_error_code() {
+  std::string res = exec("vcgencmd get_throttled");
+  uint32_t code;
+  int n = sscanf(res.c_str(), "throttled=%x\n", &code);
+  return code;
+}
+
 #endif
