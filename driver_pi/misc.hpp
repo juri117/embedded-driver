@@ -40,8 +40,8 @@
 
 typedef int adc_input_t;
 
-#define ON 1
-#define OFF 0
+//#define ON 1
+//#define OFF 0
 
 #define LED_GPIO 24     // just a suggestion
 #define BUTTON_GPIO 23  // just a suggestion

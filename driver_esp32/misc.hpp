@@ -28,8 +28,8 @@
 
 typedef adc1_channel_t adc_input_t;
 
-#define ON 1
-#define OFF 0
+// #define ON 1
+// #define OFF 0
 
 #define LED_GPIO GPIO_NUM_2     // default led gpio on devboard
 #define BUTTON_GPIO GPIO_NUM_0  // default button gpio on devboard
