@@ -30,6 +30,7 @@
 #elif BUILD_TARGET == TARGET_PI3
 #include "driver_pi/NeoPixel.hpp"
 #include "driver_pi/PrefManager.hpp"
+#include "driver_pi/Sftp.hpp"
 #include "driver_pi/TcpConnector.hpp"
 #include "driver_pi/isc.hpp"
 #include "driver_pi/isc_slave.hpp"

@@ -1,3 +1,6 @@
 [submodule "libs/rapidjson"]
 	path = libs/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
+[submodule "libs/ftpclient-cpp"]
+	path = libs/ftpclient-cpp
+	url = https://github.com/embeddedmz/ftpclient-cpp.git
