@@ -37,8 +37,8 @@ bool file_exists(const uint8_t *name) {
 
 bool find_script(const char *script_name, uint8_t *script_path,
                  uint16_t max_len) {
-  char current_path[PATH_MAX];
-  memset(current_path, 0x00, PATH_MAX);
+  char current_path[FILENAME_MAX];
+  memset(current_path, 0x00, FILENAME_MAX);
   getcwd(current_path, FILENAME_MAX);
 
   memset(script_path, 0x00, max_len);

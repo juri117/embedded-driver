@@ -6,7 +6,7 @@
 static const char* TAG = "Sftp";
 
 void write_log(const std::string& strLogMsg) {
-  log_i(TAG, "con: %s", strLogMsg.c_str());
+  log_d(TAG, "con: %s", strLogMsg.c_str());
 }
 
 Sftp::Sftp() {}

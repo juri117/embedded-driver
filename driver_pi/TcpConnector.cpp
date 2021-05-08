@@ -86,22 +86,22 @@ bool TcpConnector::disable_wifi() {
 }
 
 void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
-  // char result[PATH_MAX];
-  // memset(result, 0x00, PATH_MAX);
+  // char result[FILENAME_MAX];
+  // memset(result, 0x00, FILENAME_MAX);
   // getcwd(result, FILENAME_MAX);
-  // uint8_t cmd_buff[PATH_MAX];
-  // memset(cmd_buff, 0x00, PATH_MAX);
+  // uint8_t cmd_buff[FILENAME_MAX];
+  // memset(cmd_buff, 0x00, FILENAME_MAX);
   // sprintf(
   //     (char*)cmd_buff,
   //     "sudo python %s/main/driver/driver_pi/add_wifi_network.py \"%s\"
   //     \"%s\"", result, ssid, pw);
-  uint8_t script_path[PATH_MAX];
-  if (!find_script("add_wifi_network.py", script_path, PATH_MAX)) {
+  uint8_t script_path[FILENAME_MAX];
+  if (!find_script("add_wifi_network.py", script_path, FILENAME_MAX)) {
     log_e(TAG, "could not find add_wifi_network.py");
     return;
   }
-  uint8_t cmd_buff[PATH_MAX];
-  memset(cmd_buff, 0x00, PATH_MAX);
+  uint8_t cmd_buff[FILENAME_MAX];
+  memset(cmd_buff, 0x00, FILENAME_MAX);
   sprintf((char*)cmd_buff, "sudo python3 \"%s\" \"%s\" \"%s\"", script_path,
           ssid, pw);
   int res = exec_ret_code((const char*)cmd_buff);

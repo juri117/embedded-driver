@@ -19,11 +19,8 @@
 #include <iostream>
 #include <string>
 
-#include "log.hpp"
-
-#define LINUX true
-
 #include "../libs/ftpclient-cpp/FTP/FTPClient.h"
+#include "log.hpp"
 
 // install
 // https://github.com/embeddedmz/ftpclient-cpp

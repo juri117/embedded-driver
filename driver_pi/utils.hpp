@@ -13,7 +13,6 @@
 #define DRIVER_DRIVER_PI3_UTILS_H
 
 #include <errno.h>
-#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
