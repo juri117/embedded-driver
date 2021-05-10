@@ -6,7 +6,7 @@
 static const char* TAG = "Sftp";
 
 void write_log(const std::string& strLogMsg) {
-  log_d(TAG, "con: %s", strLogMsg.c_str());
+  log_i(TAG, "con: %s", strLogMsg.c_str());
 }
 
 Sftp::Sftp() {}
@@ -25,31 +25,49 @@ bool Sftp::connect(std::string host, uint16_t port, std::string user,
 
 bool Sftp::disconnect() { return sftp->CleanupSession(); }
 
+// curl -k "sftp://81.169.224.239/files/" --user "ftpLogUser:q5+rUPu=R4wX-?f$"
+// -T "logs/2021-05-10_08-07-45.log" --ftp-create-dirs
+
 bool Sftp::upload_folder(std::string local_path, std::string remote_path,
                          bool delete_after_upload,
                          std::vector<std::string> delte_exceptions) {
-  // std::string path = "logs";
+  std::string base_path = "files";  //"/home/ftpLogUser";
   bool total_suc = true;
-  if (!sftp->CreateDir(remote_path)) {
-    // this might just mean, that the dir already exists
+
+  /*
+  try {
+    if (!sftp->CreateDir(base_path + "/" + remote_path)) {
+      // this might just mean, that the dir already exists
+    }
+  } catch (...) {
+    return false;
   }
+  */
   bool create_dirs = true;
   for (const auto& entry : std::filesystem::directory_iterator(local_path)) {
     // std::cout << entry.path() << std::endl;
-    bool suc = sftp->UploadFile(
-        entry.path(),
-        "/" + remote_path + "/" + entry.path().filename().string(),
-        &create_dirs);
-    log_i(TAG, "uploaded %s: %d", entry.path().c_str(), suc);
-    if (suc) {
-      if (delete_after_upload &&
-          std::find(delte_exceptions.begin(), delte_exceptions.end(),
-                    entry.path().string()) == delte_exceptions.end()) {
-        log_d(TAG, "delete %s", entry.path().c_str());
-        remove(entry.path());
+    try {
+      bool suc = sftp->UploadFile(entry.path(),
+                                  base_path + "/" + remote_path + "/" +
+                                      entry.path().filename().string(),
+                                  &create_dirs);
+      log_i(TAG, "uploaded %s -> %s: %d", entry.path().c_str(),
+            (base_path + "/" + remote_path + "/" +
+             entry.path().filename().string())
+                .c_str(),
+            suc);
+      if (suc) {
+        if (delete_after_upload &&
+            std::find(delte_exceptions.begin(), delte_exceptions.end(),
+                      entry.path().string()) == delte_exceptions.end()) {
+          log_d(TAG, "delete %s", entry.path().c_str());
+          remove(entry.path());
+        }
+      } else {
+        total_suc = false;
       }
-    } else {
-      total_suc = false;
+    } catch (...) {
+      return false;
     }
   }
   return total_suc;
