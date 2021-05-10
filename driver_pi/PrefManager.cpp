@@ -37,19 +37,24 @@ void PrefManager::init() {
           // Output diagnostic information
           StringBuffer sb;
           validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);
-          printf("Invalid schema: %s\n", sb.GetString());
-          printf("Invalid keyword: %s\n", validator.GetInvalidSchemaKeyword());
+          log_w(TAG, "Invalid schema: %s", sb.GetString());
+          log_w(TAG, "Invalid keyword: %s",
+                validator.GetInvalidSchemaKeyword());
           sb.Clear();
           validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);
-          printf("Invalid document: %s\n", sb.GetString());
+          log_w(TAG, "Invalid document: %s", sb.GetString());
         }
-        return;
+        // return;
+      } else {
+        log_e(TAG, "could not parse config.json");
       }
       fclose(fp);
-      log_e(TAG, "could not parse config.json");
+    } else {
+      log_e(TAG, "could not parse config_schema.json");
     }
     fclose(fpSchema);
-    log_e(TAG, "could not parse config_schema.json");
+
+    return;
   }
   log_e(TAG, "could not find config.json");
   // const char json[] = "{}";
