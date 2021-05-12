@@ -33,16 +33,6 @@ bool Sftp::upload_folder(std::string local_path, std::string remote_path,
                          std::vector<std::string> delte_exceptions) {
   std::string base_path = "files";  //"/home/ftpLogUser";
   bool total_suc = true;
-
-  /*
-  try {
-    if (!sftp->CreateDir(base_path + "/" + remote_path)) {
-      // this might just mean, that the dir already exists
-    }
-  } catch (...) {
-    return false;
-  }
-  */
   bool create_dirs = true;
   for (const auto& entry : std::filesystem::directory_iterator(local_path)) {
     // std::cout << entry.path() << std::endl;
@@ -71,6 +61,19 @@ bool Sftp::upload_folder(std::string local_path, std::string remote_path,
     }
   }
   return total_suc;
+}
+
+bool Sftp::download_file(std::string local_path, std::string remote_path) {
+  std::string base_path = "files";
+  try {
+    bool suc = sftp->DownloadFile(local_path, base_path + "/" + remote_path);
+    log_i(TAG, "downloaded %s -> %s: %d",
+          (base_path + "/" + remote_path).c_str(), local_path.c_str(), suc);
+
+  } catch (...) {
+    return false;
+  }
+  return false;
 }
 
 #endif
