@@ -86,7 +86,7 @@ uint8_t PrefManager::read_u8(const char *key, uint8_t def) {
   }
   if (this->doc[key].IsUint()) {
     uint8_t val = this->doc[key].GetUint();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -108,7 +108,7 @@ uint16_t PrefManager::read_u16(const char *key, uint16_t def) {
   }
   if (this->doc[key].IsUint()) {
     uint16_t val = this->doc[key].GetUint();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -130,7 +130,7 @@ int16_t PrefManager::read_i16(const char *key, int16_t def) {
   }
   if (this->doc[key].IsUint()) {
     int16_t val = this->doc[key].GetUint();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -152,7 +152,7 @@ uint32_t PrefManager::read_u32(const char *key, uint32_t def) {
   }
   if (this->doc[key].IsUint()) {
     uint32_t val = this->doc[key].GetUint();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -174,7 +174,7 @@ int32_t PrefManager::read_i32(const char *key, int32_t def) {
   }
   if (this->doc[key].IsInt()) {
     int32_t val = this->doc[key].GetInt();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -196,7 +196,7 @@ uint64_t PrefManager::read_u64(const char *key, uint64_t def) {
   }
   if (this->doc[key].IsUint64()) {
     uint64_t val = this->doc[key].GetUint64();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -218,7 +218,7 @@ double PrefManager::read_double(const char *key, double def) {
   }
   if (this->doc[key].IsDouble()) {
     double val = this->doc[key].GetDouble();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -240,7 +240,7 @@ float PrefManager::read_float(const char *key, float def) {
   }
   if (this->doc[key].IsFloat()) {
     float val = this->doc[key].GetFloat();
-    log_d(TAG, "read: %s = %d", key, val);
+    // log_d(TAG, "read: %s = %d", key, val);
     return val;
   }
   log_d(TAG, "could not read: %s use default %d", key, def);
@@ -298,7 +298,7 @@ uint16_t PrefManager::read_str(const char *key, uint8_t *ary,
   }
   if (this->doc[key].IsString()) {
     memcpy(ary, this->doc[key].GetString(), this->doc[key].GetStringLength());
-    log_d(TAG, "read: %s = %s", key, this->doc[key].GetString());
+    // log_d(TAG, "read: %s = %s", key, this->doc[key].GetString());
     return this->doc[key].GetStringLength();
   }
   return 0;
