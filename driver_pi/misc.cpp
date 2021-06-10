@@ -114,6 +114,7 @@ uint16_t get_cpu_load_this_process() {
   std::string res = exec("ps -C \"main\" -o \%cpu,\%mem");
   float load, mem;
   int n = sscanf(res.c_str(), "%*s %*s %f %f", &load, &mem);
+  // ToDo: check n if it worked
   return (uint16_t)(load * 100);
 }
 
@@ -146,6 +147,7 @@ uint32_t get_system_error_code() {
   std::string res = exec("vcgencmd get_throttled");
   uint32_t code;
   int n = sscanf(res.c_str(), "throttled=%x\n", &code);
+  // ToDo: check n if it worked
   return code;
 }
 

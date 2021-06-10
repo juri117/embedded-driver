@@ -83,6 +83,6 @@ uint16_t get_cpu_load_this_process();
 int16_t get_cpu_temp();
 uint32_t get_system_error_code();
 
-std::string exec(const char* cmd);
+// std::string exec(const char* cmd);
 
 #endif /* DRIVER_DRIVER_PI3_MISC_H */

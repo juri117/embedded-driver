@@ -11,7 +11,11 @@ std::string exec(const char *cmd) {
   std::string result;
   // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
   FILE *pipe = popen(cmd, "r");
-  if (!pipe) throw std::runtime_error("popen() failed!");
+  if (!pipe) {
+    log_e(TAG, "exec failed for: %s, err: %s", cmd, , strerror(errno));
+    return "";
+    // throw std::runtime_error("popen() failed!");
+  }
   while (!feof(pipe)) {
     if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
   }
@@ -24,7 +28,11 @@ int exec_ret_code(const char *cmd) {
   std::string result;
   // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
   FILE *pipe = popen(cmd, "r");
-  if (!pipe) throw std::runtime_error("popen() failed!");
+  if (!pipe) {
+    log_e(TAG, "exec_ret_code failed for: %s, err: %s", cmd, , strerror(errno));
+    return -1;
+    // throw std::runtime_error("popen() failed!");
+  }
   while (!feof(pipe)) {
     if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
   }
