@@ -12,7 +12,7 @@ std::string exec(const char *cmd) {
   // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
   FILE *pipe = popen(cmd, "r");
   if (!pipe) {
-    log_e(TAG, "exec failed for: %s, err: %s", cmd, , strerror(errno));
+    log_e(TAG, "exec failed for: %s, err: %s", cmd, strerror(errno));
     return "";
     // throw std::runtime_error("popen() failed!");
   }
@@ -29,7 +29,7 @@ int exec_ret_code(const char *cmd) {
   // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
   FILE *pipe = popen(cmd, "r");
   if (!pipe) {
-    log_e(TAG, "exec_ret_code failed for: %s, err: %s", cmd, , strerror(errno));
+    log_e(TAG, "exec_ret_code failed for: %s, err: %s", cmd, strerror(errno));
     return -1;
     // throw std::runtime_error("popen() failed!");
   }
