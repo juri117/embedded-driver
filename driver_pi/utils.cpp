@@ -13,13 +13,15 @@ std::string exec(const char *cmd) {
   FILE *pipe = popen(cmd, "r");
   if (!pipe) {
     log_e(TAG, "exec failed for: %s, err: %s", cmd, strerror(errno));
+    pclose(pipe);
     return "";
     // throw std::runtime_error("popen() failed!");
   }
   while (!feof(pipe)) {
     if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
   }
-  int return_code = WEXITSTATUS(pclose(pipe));
+  // int return_code = WEXITSTATUS(pclose(pipe));
+  pclose(pipe);
   return result;
 }
 
@@ -30,6 +32,7 @@ int exec_ret_code(const char *cmd) {
   FILE *pipe = popen(cmd, "r");
   if (!pipe) {
     log_e(TAG, "exec_ret_code failed for: %s, err: %s", cmd, strerror(errno));
+    pclose(pipe);
     return -1;
     // throw std::runtime_error("popen() failed!");
   }
