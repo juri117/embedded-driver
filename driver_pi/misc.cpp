@@ -111,9 +111,10 @@ uint16_t get_cpu_load_total() {
  * @return uint16_t cpu load in percent * 100
  */
 uint16_t get_cpu_load_this_process() {
-  std::string res = exec("ps -C \"main\" -o \%cpu,\%mem");
+  // std::string res = exec("ps -C \"main\" -o \%cpu,\%mem");
+  exec_return_t res = exec("ps -C \"main\" -o \%cpu,\%mem");
   float load, mem;
-  int n = sscanf(res.c_str(), "%*s %*s %f %f", &load, &mem);
+  int n = sscanf(res.result.c_str(), "%*s %*s %f %f", &load, &mem);
   // ToDo: check n if it worked
   return (uint16_t)(load * 100);
 }
@@ -144,9 +145,10 @@ int16_t get_cpu_temp() {
  * @return uint32_t error code
  */
 uint32_t get_system_error_code() {
-  std::string res = exec("vcgencmd get_throttled");
+  // std::string res = exec("vcgencmd get_throttled");
+  exec_return_t res = exec("vcgencmd get_throttled");
   uint32_t code;
-  int n = sscanf(res.c_str(), "throttled=%x\n", &code);
+  int n = sscanf(res.result.c_str(), "throttled=%x\n", &code);
   // ToDo: check n if it worked
   return code;
 }

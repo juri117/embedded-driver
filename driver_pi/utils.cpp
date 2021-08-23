@@ -6,40 +6,24 @@
 
 static const char *TAG = "pi_utils";
 
-std::string exec(const char *cmd) {
+exec_return_t exec(const char *cmd) {
   std::array<char, 128> buffer;
   std::string result;
-  // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-  FILE *pipe = popen(cmd, "r");
-  if (!pipe) {
-    log_e(TAG, "exec failed for: %s, err: %s", cmd, strerror(errno));
-    pclose(pipe);
-    return "";
-    // throw std::runtime_error("popen() failed!");
+  int return_code = -1;
+  auto pclose_wrapper = [&return_code](FILE *cmd) {
+    return_code = pclose(cmd);
+  };
+  {  // scope is important, have to make sure the ptr goes out of scope first
+    const std::unique_ptr<FILE, decltype(pclose_wrapper)> pipe(popen(cmd, "r"),
+                                                               pclose_wrapper);
+    if (pipe) {
+      while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+      }
+    }
   }
-  while (!feof(pipe)) {
-    if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
-  }
-  // int return_code = WEXITSTATUS(pclose(pipe));
-  pclose(pipe);
-  return result;
-}
-
-int exec_ret_code(const char *cmd) {
-  std::array<char, 128> buffer;
-  std::string result;
-  // std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-  FILE *pipe = popen(cmd, "r");
-  if (!pipe) {
-    log_e(TAG, "exec_ret_code failed for: %s, err: %s", cmd, strerror(errno));
-    pclose(pipe);
-    return -1;
-    // throw std::runtime_error("popen() failed!");
-  }
-  while (!feof(pipe)) {
-    if (fgets(buffer.data(), 128, pipe) != nullptr) result += buffer.data();
-  }
-  return WEXITSTATUS(pclose(pipe));
+  // return make_pair(result, return_code);
+  return {return_code, result};
 }
 
 bool file_exists(const uint8_t *name) {

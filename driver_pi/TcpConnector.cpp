@@ -68,18 +68,18 @@ void TcpConnector::init(uint8_t mode, const uint8_t* ssid, const uint8_t* pw) {
 
 bool TcpConnector::enable_wifi() {
   log_i(TAG, "turn on wifi");
-  std::string res = exec("sudo ifconfig wlan0 up");
-  if (res.length() > 0) {
-    log_i(TAG, "enable_wifi returned an error: %s", res.c_str());
+  exec_return_t res = exec("sudo ifconfig wlan0 up");
+  if (res.result.length() > 0) {
+    log_i(TAG, "enable_wifi returned an error: %s", res.result.c_str());
     return false;
   }
   return true;
 }
 bool TcpConnector::disable_wifi() {
   log_i(TAG, "turn off wifi");
-  std::string res = exec("sudo ifconfig wlan0 down");
-  if (res.length() > 0) {
-    log_i(TAG, "disable_wifi returned an error: %s", res.c_str());
+  exec_return_t res = exec("sudo ifconfig wlan0 down");
+  if (res.result.length() > 0) {
+    log_i(TAG, "disable_wifi returned an error: %s", res.result.c_str());
     return false;
   }
   return true;
@@ -104,8 +104,8 @@ void TcpConnector::init_as_sta(const uint8_t* ssid, const uint8_t* pw) {
   memset(cmd_buff, 0x00, FILENAME_MAX);
   sprintf((char*)cmd_buff, "sudo python3 \"%s\" \"%s\" \"%s\"", script_path,
           ssid, pw);
-  int res = exec_ret_code((const char*)cmd_buff);
-  log_i(TAG, "add wifi ssid + pw: %d", res);
+  exec_return_t res = exec((const char*)cmd_buff);
+  log_i(TAG, "add wifi ssid + pw: %d", res.code);
 }
 
 void TcpConnector::init_as_ap(const uint8_t* ssid, const uint8_t* pw) {}

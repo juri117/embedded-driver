@@ -23,10 +23,13 @@
 #include "time.hpp"
 #include "types.hpp"
 
-std::string exec(const char *cmd);
+typedef struct {
+  int code;            // mm
+  std::string result;  // receive time in ms
+} exec_return_t;
 
 bool file_exists(const uint8_t *name);
-int exec_ret_code(const char *cmd);
+exec_return_t exec(const char *cmd);
 
 bool find_script(const char *script_name, uint8_t *script_path,
                  uint16_t max_len);
