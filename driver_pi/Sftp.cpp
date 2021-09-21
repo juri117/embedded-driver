@@ -66,10 +66,15 @@ bool Sftp::upload_folder(std::string local_path, std::string remote_path,
 bool Sftp::download_file(std::string local_path, std::string remote_path) {
   std::string base_path = "files";
   try {
+    CFTPClient::FileInfo res_file_info = {0, 0.0};
+    bool sucInfo = sftp->Info(base_path + "/" + remote_path, res_file_info);
+    if (!sucInfo) {
+      return false;
+    }
     bool suc = sftp->DownloadFile(local_path, base_path + "/" + remote_path);
     log_i(TAG, "downloaded %s -> %s: %d",
           (base_path + "/" + remote_path).c_str(), local_path.c_str(), suc);
-
+    return suc;
   } catch (...) {
     return false;
   }
