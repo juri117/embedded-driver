@@ -18,13 +18,16 @@ void task_delay_ms(uint32_t delay_ms) {
 
 void end_task() {}
 
-DelayUntil::DelayUntil(){
-    // this->last_wake_tick = xTaskGetTickCount();
-};
+DelayUntil::DelayUntil() : last_wake_tick(std::chrono::steady_clock::now()){};
 
 void DelayUntil::wait_for(uint32_t wait_ms) {
-  // TODO: implement propper diff wait for
-  task_delay_ms(wait_ms);
+  if ((last_wake_tick + std::chrono::milliseconds(wait_ms) -
+       std::chrono::steady_clock::now())
+          .count() < 0)
+    last_wake_tick = std::chrono::steady_clock::now();
+  else
+    last_wake_tick += std::chrono::milliseconds(wait_ms);
+  std::this_thread::sleep_until(last_wake_tick);
 };
 
 #endif
