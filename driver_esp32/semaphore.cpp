@@ -2,6 +2,8 @@
 
 #if BUILD_TARGET == TARGET_ESP32
 
+void give_semaphore(Semaphore sema) { sema.give(); }
+
 Semaphore::Semaphore() {
   this->sema = xSemaphoreCreateMutex();
   //   if (this->sema == NULL) {

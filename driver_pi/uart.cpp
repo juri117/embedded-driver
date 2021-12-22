@@ -42,6 +42,8 @@ int uart_read(uart_port_t uart_num, uint8_t* buff, uint32_t length,
         buff[i] = serialGetchar(uart_dev[uart_num].fd);
       }
       return read_len;
+    } else if (read_len < 0) {
+      printf(TAG, "serial ERROR: %s\n", strerror(errno));
     }
     if (get_time_system_ms() - start >= timeout_ms) {
       return ERROR_TIMEOUT;

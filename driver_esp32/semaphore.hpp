@@ -1,5 +1,5 @@
 /**
- * @file semaphore.h
+ * @file semaphore.hpp
  * @author Juri
  * @brief
  * @version 0.1
@@ -31,4 +31,7 @@ class Semaphore {
   bool take(uint32_t timeout_ms);
   void give();
 };
+
+void give_semaphore(Semaphore sema);
+
 #endif /* DRIVER_DRIVER_ESP32_SEMAPHORE_H */
