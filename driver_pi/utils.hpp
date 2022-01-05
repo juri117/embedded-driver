@@ -24,8 +24,8 @@
 #include "types.hpp"
 
 typedef struct {
-  int code;            // mm
-  std::string result;  // receive time in ms
+  int code;            // return code
+  std::string result;  // stout
 } exec_return_t;
 
 bool file_exists(const uint8_t *name);

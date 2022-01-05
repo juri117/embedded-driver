@@ -30,37 +30,74 @@ bool Sftp::disconnect() { return sftp->CleanupSession(); }
 
 bool Sftp::upload_folder(std::string local_path, std::string remote_path,
                          bool delete_after_upload,
-                         std::vector<std::string> delte_exceptions) {
-  std::string base_path = "files";  //"/home/ftpLogUser";
+                         std::vector<std::string> delete_exceptions) {
+  // std::string base_path = "files";  //"/home/ftpLogUser";
   bool total_suc = true;
   bool create_dirs = true;
   for (const auto& entry : std::filesystem::directory_iterator(local_path)) {
     // std::cout << entry.path() << std::endl;
-    try {
-      bool suc = sftp->UploadFile(entry.path(),
-                                  base_path + "/" + remote_path + "/" +
-                                      entry.path().filename().string(),
-                                  &create_dirs);
-      log_i(TAG, "uploaded %s -> %s: %d", entry.path().c_str(),
-            (base_path + "/" + remote_path + "/" +
-             entry.path().filename().string())
-                .c_str(),
-            suc);
-      if (suc) {
-        if (delete_after_upload &&
-            std::find(delte_exceptions.begin(), delte_exceptions.end(),
-                      entry.path().string()) == delte_exceptions.end()) {
-          log_d(TAG, "delete %s", entry.path().c_str());
-          remove(entry.path());
-        }
-      } else {
-        total_suc = false;
-      }
-    } catch (...) {
-      return false;
+    bool delete_this =
+        delete_after_upload &&
+        std::find(delete_exceptions.begin(), delete_exceptions.end(),
+                  entry.path().string()) == delete_exceptions.end();
+    if (!this->upload_file(
+            entry.path(),
+            remote_path,  // + "/" + entry.path().filename().string(),
+            delete_this)) {
+      total_suc = false;
     }
+    /*
+try {
+bool suc = sftp->UploadFile(entry.path(),
+base_path + "/" + remote_path + "/" +
+    entry.path().filename().string(),
+&create_dirs);
+log_i(TAG, "uploaded %s -> %s: %d", entry.path().c_str(),
+(base_path + "/" + remote_path + "/" +
+entry.path().filename().string())
+.c_str(),
+suc);
+if (suc) {
+if (delete_after_upload &&
+std::find(delete_exceptions.begin(), delete_exceptions.end(),
+entry.path().string()) == delete_exceptions.end()) {
+log_d(TAG, "delete %s", entry.path().c_str());
+remove(entry.path());
+}
+} else {
+total_suc = false;
+}
+} catch (...) {
+return false;
+}
+*/
   }
   return total_suc;
+}
+
+bool Sftp::upload_file(std::string local_path, std::string remote_path,
+                       bool delete_after_upload) {
+  std::string base_path = "files";
+  bool create_dirs = true;
+  try {
+    bool suc =
+        sftp->UploadFile(local_path.c_str(),
+                         base_path + "/" + remote_path.c_str(), &create_dirs);
+    log_i(TAG, "uploaded %s -> %s: %d", local_path.c_str(), remote_path.c_str(),
+          suc);
+    if (suc) {
+      if (delete_after_upload) {
+        log_d(TAG, "delete %s", local_path.c_str());
+        remove(local_path.c_str());
+      }
+      return true;
+    } else {
+      return false;
+    }
+  } catch (...) {
+    return false;
+  }
+  return false;
 }
 
 bool Sftp::download_file(std::string local_path, std::string remote_path) {

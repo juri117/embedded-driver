@@ -43,6 +43,8 @@ class Sftp {
   bool upload_folder(std::string local_path, std::string remote_path,
                      bool delete_after_upload,
                      std::vector<std::string> delte_exceptions);
+  bool upload_file(std::string local_path, std::string remote_path,
+                   bool delete_after_upload);
   bool download_file(std::string local_path, std::string remote_path);
 };
 
