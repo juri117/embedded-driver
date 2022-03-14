@@ -49,7 +49,7 @@ void init_gpio_in(int pin_num) {
   gpio_config(&btn_config);
 }
 
-bool get_gpio_in(int pin_num) { return gpio_get_level(BUTTON_GPIO); }
+bool get_gpio_in(int pin_num) { return gpio_get_level(pin_num); }
 
 void reboot() { esp_restart(); }
 

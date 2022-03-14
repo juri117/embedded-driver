@@ -38,9 +38,12 @@ void init_onboard_button() { init_gpio_in(BUTTON_GPIO); }
 
 bool button_is_pressed() { return get_gpio_in(BUTTON_GPIO); }
 
-void init_gpio_in(int pin_num) { pinMode(pin_num, INPUT); }
+void init_gpio_in(int pin_num) {
+  pinMode(pin_num, INPUT);
+  pullUpDnControl(pin_num, PUD_DOWN);
+}
 
-bool get_gpio_in(int pin_num) { return digitalRead(BUTTON_GPIO); }
+bool get_gpio_in(int pin_num) { return digitalRead(pin_num); }
 
 void reboot() {
   // std::exit(42);
