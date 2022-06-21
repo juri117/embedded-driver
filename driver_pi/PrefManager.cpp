@@ -76,7 +76,7 @@ void PrefManager::commit() {
   this->doc.Accept(writer);
 
   fclose(fp);
-  log_e(TAG, "wrote settings to config.json");
+  log_i(TAG, "wrote settings to config.json");
 }
 
 uint8_t PrefManager::read_u8(const char *key, uint8_t def) {
