@@ -6,18 +6,24 @@
 
 static const char *TAG = "misc";
 
+int pi_fd = 0;
+
 void init_gpio_isr_service() {
-  if (wiringPiSetup() < 0) {
-    log_e(TAG, "Unable to setup wiringPi: %s", strerror(errno));
+  pi_fd = pigpio_start("localhost", "8888");
+  if (pi_fd < 0) {
+    log_e(TAG, "Unable to setup pigpio (%d): %s", pi_fd, strerror(errno));
+  } else {
+    log_i(TAG, "init pigpio: %i", pi_fd);
   }
 }
 error_t register_gpio_interrupt(int gpio_num, void (*function)(), void *args) {
   // pinMode(gpio_num, OUTPUT);
-  pullUpDnControl(gpio_num, PUD_DOWN);
-  if (wiringPiISR(gpio_num, INT_EDGE_RISING, function) < 0) {
-    log_e(TAG, "Unable to setup wiringPiISR: %s", strerror(errno));
-    return ERROR_FAIL;
-  }
+  set_pull_up_down(pi_fd, gpio_num, PI_PUD_DOWN);
+  // if (gpioSetISRFunc(gpio_num, RISING_EDGE, PI_MAX_WDOG_TIMEOUT, function) <
+  //     0) {
+  //   log_e(TAG, "Unable to setup wiringPiISR: %s", strerror(errno));
+  //   return ERROR_FAIL;
+  // }
   return ERROR_OK;
 }
 
@@ -30,20 +36,20 @@ void init_onboard_led() {
 
 void set_led(bool on) { set_gpio_out(LED_GPIO, on); }
 
-void init_gpio_out(int pin_num) { pinMode(pin_num, OUTPUT); }
+void init_gpio_out(int pin_num) { set_mode(pi_fd, pin_num, PI_OUTPUT); }
 
-void set_gpio_out(int pin_num, bool on) { digitalWrite(pin_num, on); }
+void set_gpio_out(int pin_num, bool on) { gpio_write(pi_fd, pin_num, on); }
 
 void init_onboard_button() { init_gpio_in(BUTTON_GPIO); }
 
 bool button_is_pressed() { return get_gpio_in(BUTTON_GPIO); }
 
 void init_gpio_in(int pin_num) {
-  pinMode(pin_num, INPUT);
-  pullUpDnControl(pin_num, PUD_DOWN);
+  set_mode(pi_fd, pin_num, PI_INPUT);
+  set_pull_up_down(pi_fd, pin_num, PI_PUD_DOWN);
 }
 
-bool get_gpio_in(int pin_num) { return digitalRead(pin_num); }
+bool get_gpio_in(int pin_num) { return gpio_read(pi_fd, pin_num); }
 
 void reboot() {
   // std::exit(42);

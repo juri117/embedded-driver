@@ -12,10 +12,9 @@
 #ifndef DRIVER_DRIVER_PI3_SPI_H
 #define DRIVER_DRIVER_PI3_SPI_H
 
+#include <pigpiod_if2.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <wiringPi.h>
-#include <wiringPiSPI.h>
 
 #include <cstring>
 #include <iostream>

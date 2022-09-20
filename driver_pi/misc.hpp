@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <linux/if.h>
 #include <netdb.h>
+#include <pigpiod_if2.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -23,7 +24,6 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <wiringPi.h>
 
 #include <array>
 #include <cstdio>
@@ -43,8 +43,8 @@ typedef int adc_input_t;
 //#define ON 1
 //#define OFF 0
 
-#define LED_GPIO 24     // just a suggestion
-#define BUTTON_GPIO 23  // just a suggestion
+#define LED_GPIO 19     // just a suggestion
+#define BUTTON_GPIO 13  // just a suggestion
 
 void init_gpio_isr_service();
 error_t register_gpio_interrupt(int gpio_num, void (*function)(), void* args);

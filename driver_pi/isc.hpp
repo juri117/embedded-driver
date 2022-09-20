@@ -12,20 +12,22 @@
 #ifndef DRIVER_DRIVER_PI3_ISC_H
 #define DRIVER_DRIVER_PI3_ISC_H
 
+#define I2C_SMBUS_WRITE 0
+
 // sudo apt-get install libi2c-dev
 
 extern "C" {
-#include <i2c/smbus.h>
-#include <linux/i2c-dev.h>
+//#include <i2c/smbus.h>
+//#include <linux/i2c-dev.h>
 }
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
+#include <pigpiod_if2.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include <wiringPiI2C.h>
 
 #include <iostream>
 

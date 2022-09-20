@@ -25,6 +25,8 @@ static const char *TAG = "i2c";
 
 int isc_fd[ISC_ADDRESS_COUNT];
 
+extern int pi_fd;
+
 /**
  * @brief prints a table of accessable slaves addresses to log
  *
@@ -81,9 +83,9 @@ error_t isc_probe(i2c_port_t port, uint8_t address) {
   }
   if ((address >= 0x30 && address <= 0x37) ||
       (address >= 0x50 && address <= 0x5F))
-    res = i2c_smbus_read_byte(port);
+    res = i2c_read_byte(pi_fd, port);
   else
-    res = i2c_smbus_write_quick(port, I2C_SMBUS_WRITE);
+    res = i2c_write_byte(pi_fd, port, I2C_SMBUS_WRITE);
   if (res < 0) {
     return ERROR_FAIL;
   }
@@ -107,7 +109,7 @@ error_t isc_master_read_bytes(i2c_port_t i2c_num, uint16_t address,
     }
   }
   for (uint16_t i = 0; i < len; i++) {
-    int ret = wiringPiI2CRead(isc_fd[address]);
+    int ret = i2c_read_byte(pi_fd, isc_fd[address]);
     if (ret >= 0) {
       buff[i] = ret;
     } else {
@@ -136,7 +138,7 @@ error_t isc_master_read_register(i2c_port_t i2c_num, uint16_t address,
     }
   }
   for (uint16_t i = 0; i < readBuffLen; i++) {
-    int ret = wiringPiI2CReadReg8(isc_fd[address], regAdd + i);
+    int ret = i2c_read_byte_data(pi_fd, isc_fd[address], regAdd + i);
     if (ret >= 0) {
       readBuff[i] = ret;
     } else {
@@ -159,8 +161,9 @@ error_t isc_master_read_register16(i2c_port_t i2c_num, uint16_t address,
   buffer1[0] = regAdd >> 8;
   buffer1[1] = regAdd & 0x00FF;
   int length1 = 2;  //<<< Number of bytes to write
-  write(isc_fd[address], buffer1, length1);
-  if (read(isc_fd[address], readBuff, readBuffLen) == readBuffLen) {
+  i2c_write_device(pi_fd, isc_fd[address], buffer1, length1);
+  if (i2c_read_device(pi_fd, isc_fd[address], (char *)readBuff, readBuffLen) ==
+      readBuffLen) {
     return ERROR_OK;
   }
   return ERROR_FAIL;
@@ -214,7 +217,8 @@ int isc_master_write_register(i2c_port_t i2c_num, uint16_t address,
     }
   }
   for (uint16_t i = 0; i < writeBuffLen; i++) {
-    int ret = wiringPiI2CWriteReg8(isc_fd[address], regAdd + i, writeBuff[i]);
+    int ret =
+        i2c_write_byte_data(pi_fd, isc_fd[address], regAdd + i, writeBuff[i]);
     if (ret < 0) {
       return ERROR_FAIL;
     }
@@ -279,7 +283,7 @@ error_t isc_master_connect_device(uint16_t address) {
     log_e(TAG, "invalid i2c address: %d", address);
     return ERROR_FAIL;
   }
-  int file_handler = wiringPiI2CSetup(address);
+  int file_handler = i2c_open(pi_fd, 0, address, 0);
   if (file_handler > 0) {
     isc_fd[address] = file_handler;
     return ERROR_OK;

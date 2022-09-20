@@ -13,11 +13,13 @@
 #define DRIVER_DRIVER_PI3_UART_H
 
 #include <errno.h>
+#include <fcntl.h>  //Used for UART
+#include <pigpiod_if2.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <wiringPi.h>
-#include <wiringSerial.h>
+#include <termios.h>  //Used for UART
+#include <unistd.h>   //Used for UART
 
 #include "../error.hpp"
 #include "log.hpp"
