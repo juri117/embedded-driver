@@ -38,7 +38,7 @@ void uart_init(uart_port_t uart_num, uart_name_t uart_name, gpio_num_t dummy1,
       baud_flag = B115200;
       break;
   }
-  options.c_cflag = baudRate | CS8 | CLOCAL | CREAD;  //<Set baud rate
+  options.c_cflag = baud_flag | CS8 | CLOCAL | CREAD;  //<Set baud rate
   options.c_iflag = IGNPAR;
   options.c_oflag = 0;
   options.c_lflag = 0;
