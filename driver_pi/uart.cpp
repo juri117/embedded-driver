@@ -20,7 +20,25 @@ void uart_init(uart_port_t uart_num, uart_name_t uart_name, gpio_num_t dummy1,
   }
   struct termios options;
   tcgetattr(uart_dev[uart_num].fd, &options);
-  options.c_cflag = B921600 | CS8 | CLOCAL | CREAD;  //<Set baud rate
+  int baud_flag = B115200;
+  switch (baudRate) {
+    case 9600:
+      baud_flag = B9600;
+      break;
+    case 38400:
+      baud_flag = B38400;
+      break;
+    case 57600:
+      baud_flag = B57600;
+      break;
+    case 921600:
+      baud_flag = B921600;
+      break;
+    default:
+      baud_flag = B115200;
+      break;
+  }
+  options.c_cflag = baudRate | CS8 | CLOCAL | CREAD;  //<Set baud rate
   options.c_iflag = IGNPAR;
   options.c_oflag = 0;
   options.c_lflag = 0;
